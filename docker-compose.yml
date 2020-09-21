@@ -1,7 +1,7 @@
 version: '3'
 services:
   api:
-    image: tiangolo/uwsgi-nginx-flask:python3.8
+    build: docker/api
     expose: 80
     ports:
       - 8080:80
