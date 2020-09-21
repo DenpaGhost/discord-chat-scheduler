@@ -1,0 +1,38 @@
+{
+  "name": "discord-chat-scheduler-webclient",
+  "scripts": {
+    "dev": "HOST=0.0.0.0 nuxt-ts",
+    "build": "nuxt-ts build",
+    "generate": "nuxt-ts generate",
+    "start": "HOST=0.0.0.0 nuxt-ts start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
+    "@fortawesome/vue-fontawesome": "^0.1.10",
+    "@nuxt/typescript-runtime": "^1.0.0",
+    "@nuxtjs/dotenv": "^1.4.1",
+    "axios": "^0.19.2",
+    "bootstrap-4-grid": "^3.4.0",
+    "js-sha256": "^0.9.0",
+    "nuxt": "^2.14.0",
+    "nuxt-fontawesome": "^0.4.0",
+    "nuxt-property-decorator": "^2.7.2",
+    "vue-ctk-date-time-picker": "^2.5.0",
+    "vuex-module-decorators": "^0.17.0"
+  },
+  "devDependencies": {
+    "@nuxt/types": "^2.14.0",
+    "@nuxt/typescript-build": "^2.0.2",
+    "@types/jest": "^26.0.8",
+    "@vue/test-utils": "^1.0.3",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^26.2.1",
+    "jest": "^26.2.1",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^9.0.2",
+    "ts-jest": "^26.1.4",
+    "vue-jest": "^3.0.6"
+  }
+}
