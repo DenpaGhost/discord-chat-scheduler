@@ -28,7 +28,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./client/:/app/
+      - ./src/web/:/app/
     working_dir: /app/
     links:
       - api
