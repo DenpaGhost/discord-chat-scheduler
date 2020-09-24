@@ -7,8 +7,8 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./src/api/:/app/
-    working_dir: /app
+      - ./src/api/:/var/www/app/
+    working_dir: /var/www/app/
     links:
       - database
 
