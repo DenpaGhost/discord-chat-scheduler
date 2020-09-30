@@ -14,7 +14,7 @@ class CreateAuthClientsTable extends Migration
     public function up()
     {
         Schema::create('auth_clients', function (Blueprint $table) {
-            $table->uuid('id')->unique();
+            $table->uuid('id')->primary();
             $table->string('client_secret')->nullable();
             $table->timestamps();
         });
