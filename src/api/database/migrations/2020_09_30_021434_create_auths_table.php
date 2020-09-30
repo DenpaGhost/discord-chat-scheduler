@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateAuthsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('auths', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('discord_id');
-            $table->rememberToken();
+            $table->string('state')->unique();
+            $table->string('code')->unique();
+            $table->string('code_challenge');
+            $table->string('code_challenge_method');
+            $table->string('discord_oauth_state')->unique();
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('auths');
     }
 }

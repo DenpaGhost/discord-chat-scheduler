@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateDiscordTokensTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('discord_tokens', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('discord_id');
-            $table->rememberToken();
+            $table->foreignId('token_id')->constrained();
+            $table->string('access_token')->unique();
+            $table->string('refresh_token');
+            $table->dateTime('expires_in');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('discord_tokens');
     }
 }
