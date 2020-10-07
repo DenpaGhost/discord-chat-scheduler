@@ -15,7 +15,6 @@ class CreateDiscordTokensTable extends Migration
     {
         Schema::create('discord_tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('token_id')->constrained()->onDelete('cascade');;
             $table->string('access_token')->unique();
             $table->string('refresh_token');
             $table->dateTime('expires_in');

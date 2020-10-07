@@ -15,12 +15,15 @@ class CreateAuthsTable extends Migration
     {
         Schema::create('auths', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('client_id')->constrained('auth_clients')->onDelete('cascade');;
+            $table->foreignUuid('client_id')
+                ->constrained('auth_clients')
+                ->onDelete('cascade');
             $table->string('state')->unique();
             $table->string('code')->unique();
             $table->string('code_challenge');
-            $table->string('code_challenge_method');
-            $table->string('discord_oauth_state')->unique();
+            $table->foreignId('discord_token_id')
+                ->constrained('discord_tokens')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
