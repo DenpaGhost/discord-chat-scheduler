@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\OAuth;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @package App\Models
  *
  * @property-read string $id
- * @property-read string $client_secret
+ * @property-read ?string $client_secret
  */
 class AuthClient extends Model
 {

@@ -15,6 +15,7 @@ class CreateAuthsTable extends Migration
     {
         Schema::create('auths', function (Blueprint $table) {
             $table->id();
+            $table->foreignUuid('client_id')->constrained('auth_clients')->onDelete('cascade');;
             $table->string('state')->unique();
             $table->string('code')->unique();
             $table->string('code_challenge');

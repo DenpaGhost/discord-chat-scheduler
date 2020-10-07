@@ -1,21 +1,26 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\OAuth;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Token
+ * Class DiscordToken
  * @package App\Models
  *
  * @property-read int $id
- * @property-read int $user_id
+ * @property-read int $token_id
  * @property string $access_token
  * @property string $refresh_token
  * @property $expires_in
  */
-class Token extends Model
+class DiscordToken extends Model
 {
     use HasFactory;
+
+    public function token()
+    {
+        return $this->belongsTo(Token::class);
+    }
 }
