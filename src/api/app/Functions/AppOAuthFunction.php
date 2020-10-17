@@ -6,6 +6,8 @@ namespace App\Functions;
 use App\Models\OAuth\Auth;
 use App\Models\OAuth\Token;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 
 /**
  * Class AppOAuthFunction
@@ -89,9 +91,36 @@ class AppOAuthFunction
      * @param string $code_challenge
      * @return bool
      */
-    public function verify(string $code_verifier, string $code_challenge)
+    public function verify(string $code_verifier, string $code_challenge): bool
     {
         $encoded = base64_encode(hash('sha256', $code_verifier, true));
         return $code_challenge === strtr(rtrim($encoded, '='), '+/', '-_');
+    }
+
+    /**
+     * 認可コードの生成
+     * UUIDを取ってハイフンを消したものをcodeとして扱う
+     *
+     * @return string
+     */
+    public function makeCode(): string
+    {
+        return str_replace('-', '', Str::uuid());
+    }
+
+    // callback
+
+    /**
+     * フロントエンドにコールバック
+     * @param string $state
+     * @param string $code
+     * @return RedirectResponse
+     */
+    public function callbackApp(string $state, string $code)
+    {
+        $callback_url = env('FRONTEND_CALLBAC_URL');
+        return redirect()->away(
+            "$callback_url?state=$state&code=$code"
+        );
     }
 }
