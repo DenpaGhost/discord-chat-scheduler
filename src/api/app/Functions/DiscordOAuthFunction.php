@@ -7,12 +7,15 @@ use App\Models\OAuth\DiscordToken;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
+/**
+ * Class DiscordOAuthFunction
+ *
+ * Discord Authorization Functions
+ *
+ * @package App\Functions
+ */
 class DiscordOAuthFunction
 {
-    /*
-     * Discord Authorization Functions
-     */
-
     // store information to our database
 
     /**
