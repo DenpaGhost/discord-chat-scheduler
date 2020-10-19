@@ -24,7 +24,8 @@ class DiscordAuth extends Model
     protected $fillable = [
         'state',
         'discord_oauth_state',
-        'code_challenge'
+        'code_challenge',
+        'auth_client_id'
     ];
 
     /**
