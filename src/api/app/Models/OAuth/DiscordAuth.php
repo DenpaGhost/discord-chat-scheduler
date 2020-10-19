@@ -14,6 +14,7 @@ use Illuminate\Database\Query\Builder;
  * @property-read string $state
  * @property-read string $discord_oauth_state
  * @property-read string $code_challenge
+ * @property-read string $auth_client_id
  * @property-read $created_at
  * @property-read $updated_at
  */
