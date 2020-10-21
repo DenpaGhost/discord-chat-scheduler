@@ -4,7 +4,7 @@ const createRandomString
 const hash = (message: string) => {
     const encoder = new TextEncoder();
     const data = encoder.encode(message);
-    return crypto.subtle.digest('SHR-256', data);
+    return crypto.subtle.digest('SHA-256', data);
 }
 
 export default {

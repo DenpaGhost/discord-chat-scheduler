@@ -20,7 +20,7 @@ class CreateAuthsTable extends Migration
                 ->onDelete('cascade');
             $table->string('state')->unique();
             $table->string('code')->unique();
-            $table->string('code_challenge');
+            $table->text('code_challenge');
             $table->foreignId('discord_token_id')
                 ->constrained('discord_tokens')
                 ->onDelete('cascade');

@@ -5,22 +5,31 @@ namespace App\Http\Controllers\OAuth;
 use App\Actions\AuthAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TokenController extends Controller
 {
     private AuthAction $action;
 
     /**
-     * @param string $code
-     * @param string $code_verifier
+     * @param Request $request
      * @return JsonResponse
      * @throws AuthenticationException
-     * @throws ModelNotFoundException
      */
-    public function grantToken(string $code, string $code_verifier)
+    public function __invoke(Request $request)
     {
-        return $this->action->grantToken($code, $code_verifier);
+        /** @var 'authorization_code'|'refresh_token' $grant_type */
+        $grant_type = $request->input('grant_type');
+        if ($grant_type === 'authorization_code') {
+            return $this->action->grantToken(
+                $request->input('code'),
+                $request->input('code_verifier')
+            );
+        } else if ($grant_type === 'refresh_token') {
+            // todo トークンリフレッシュアクションの実装
+        }
+
+        return response()->json([], 404);
     }
 }

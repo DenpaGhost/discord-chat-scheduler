@@ -28,10 +28,10 @@ class DiscordOAuthFunction
      * @return DiscordAuth
      */
     public function storeState(
+        string $auth_client_id,
         string $state,
         string $discord_oauth_state,
-        string $code_challenge,
-        string $auth_client_id
+        string $code_challenge
     ): DiscordAuth
     {
         return DiscordAuth::create([

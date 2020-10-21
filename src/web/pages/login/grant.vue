@@ -24,7 +24,6 @@ export default class grant extends Vue {
     const {data} = await Axios.post(`${process.env.OAUTH_GRANT_URI}`, {
       grant_type: 'authorization_code',
       client_id: process.env.OAUTH_CLIENT_ID,
-      redirect_uri: process.env.OAUTH_CALLBACK_URI,
       code_verifier: verifier,
       code: code
     });

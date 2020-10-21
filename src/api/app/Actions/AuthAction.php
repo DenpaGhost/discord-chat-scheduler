@@ -13,6 +13,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 
 class AuthAction
 {
@@ -63,6 +64,8 @@ class AuthAction
         if ($discord === null) throw new ModelNotFoundException();
 
         $token = $this->discord_auth->fetchAccessToken($code);
+        Log::channel('single')->info($token['access_token']);
+
         $discord_token = $this->discord_auth->storeToken(
             $token['access_token'],
             $token['refresh_token'],

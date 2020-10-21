@@ -17,7 +17,7 @@ class CreateDiscordAuthsTable extends Migration
             $table->id();
             $table->string('state');
             $table->string('discord_oauth_state');
-            $table->string('code_challenge');
+            $table->text('code_challenge');
             $table->foreignUuid('auth_client_id')->constrained('auth_clients')->onDelete('cascade');
             $table->timestamps();
         });
