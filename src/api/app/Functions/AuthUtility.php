@@ -35,7 +35,7 @@ class AuthUtility
      */
     public function makeState(): string
     {
-        return Str::random(40);
+        return Str::random(64);
     }
 
     /**
@@ -44,8 +44,8 @@ class AuthUtility
     public function makeToken(): string
     {
         $string = '';
-        while (($len = strlen($string)) < 64) {
-            $size = 64 - $len;
+        while (($len = strlen($string)) < 127) {
+            $size = 127 - $len;
             $bytes = openssl_random_pseudo_bytes($size);
             $string .= substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $size);
         }
