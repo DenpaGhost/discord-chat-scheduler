@@ -6,7 +6,6 @@ use App\Models\OAuth\DiscordAuth;
 use App\Models\OAuth\DiscordToken;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 
 /**
  * Class DiscordOAuthFunction
@@ -141,14 +140,5 @@ class DiscordOAuthFunction
             'redirect_uri' => $redirect_uri,
             'scope' => 'identify'
         ]);
-    }
-
-    /**
-     * stateの生成
-     * @return string
-     */
-    public function makeState(): string
-    {
-        return Str::random(40);
     }
 }

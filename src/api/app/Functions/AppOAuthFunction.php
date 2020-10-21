@@ -134,21 +134,4 @@ class AppOAuthFunction
             "$callback_url?state=$state&code=$code"
         );
     }
-
-    /**
-     * stateの生成
-     * @return string
-     */
-    public function makeState(): string
-    {
-        return Str::random(40);
-    }
-
-    /**
-     * @return string
-     */
-    public function makeToken(): string
-    {
-        return Str::random(127);
-    }
 }

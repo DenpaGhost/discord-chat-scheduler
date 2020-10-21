@@ -5,8 +5,10 @@ namespace App\Actions;
 
 
 use App\Functions\AppOAuthFunction;
+use App\Functions\AuthUtility;
 use App\Functions\DiscordOAuthFunction;
 use App\Functions\UserFunction;
+use App\Models\Discord\CurrentUser;
 use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -18,18 +20,21 @@ class AuthAction
     private AppOAuthFunction $app_auth;
     private DiscordOAuthFunction $discord_auth;
     private UserFunction $user_func;
+    private AuthUtility $auth_util;
 
     /**
      * AuthAction constructor.
      * @param AppOAuthFunction $app_auth
      * @param DiscordOAuthFunction $discord_auth
      * @param UserFunction $user_func
+     * @param AuthUtility $auth_util
      */
-    public function __construct(AppOAuthFunction $app_auth, DiscordOAuthFunction $discord_auth, UserFunction $user_func)
+    public function __construct(AppOAuthFunction $app_auth, DiscordOAuthFunction $discord_auth, UserFunction $user_func, AuthUtility $auth_util)
     {
         $this->app_auth = $app_auth;
         $this->discord_auth = $discord_auth;
         $this->user_func = $user_func;
+        $this->auth_util = $auth_util;
     }
 
     /**
@@ -41,7 +46,7 @@ class AuthAction
      */
     public function startDiscordAuthorizing(string $auth_client_id, string $state, string $code_challenge)
     {
-        $discord_state = $this->discord_auth->makeState();
+        $discord_state = $this->auth_util->makeState();
         $auth = $this->discord_auth->storeState($auth_client_id, $state, $discord_state, $code_challenge);
         return $this->discord_auth->redirectOAuthForm($auth->discord_oauth_state);
     }
@@ -76,13 +81,14 @@ class AuthAction
         if (!$this->app_auth->verify($verifier, $state->code_challenge))
             throw new AuthenticationException();
 
-        // todo discord apiからデータを取得する処理
-        $user = $this->user_func->findByDiscordId('');
-        if ($user === null)
-            $user = $this->user_func->create('');
+        $discord_user = new CurrentUser($state->discordToken);
 
-        $access_token = $this->app_auth->makeToken();
-        $refresh_token = $this->app_auth->makeToken();
+        $user = $this->user_func->findByDiscordId($discord_user->getId());
+        if ($user === null)
+            $user = $this->user_func->create($discord_user->getId());
+
+        $access_token = $this->auth_util->makeToken();
+        $refresh_token = $this->auth_util->makeToken();
         $now = Carbon::now();
         $expires_in = $now->copy()->addWeek();
         $diff = $now->diffInSeconds($expires_in);
