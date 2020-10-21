@@ -4,6 +4,7 @@
 namespace App\Models\Discord;
 
 
+use App\Functions\DiscordOAuthFunction;
 use App\Models\OAuth\DiscordToken;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
@@ -41,6 +42,7 @@ class CurrentUser
      */
     protected function _getCurrentUser()
     {
+        // todo expiresしている時のトークン更新処理と再送処理
         if ($this->_user === null) {
             $this->_user = $this->http_client->get('/users/@me');
         }
@@ -48,9 +50,9 @@ class CurrentUser
     }
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->_getCurrentUser()['id'];
     }
@@ -58,8 +60,17 @@ class CurrentUser
     /**
      * @return string
      */
-    public function getUserName()
+    public function getUserName(): ?string
     {
         return $this->_getCurrentUser()['username'];
+    }
+
+    protected function refreshToken(DiscordOAuthFunction $func)
+    {
+        $response = $func->refreshAccessToken($this->token->refresh_token);
+        $this->token->access_token = $response['access_token'];
+        $this->token->refresh_token = $response['refresh_token'];
+        $this->token->expires_in = $response['expires_in'];
+        $this->token->save();
     }
 }

@@ -9,7 +9,6 @@ use App\Functions\AuthUtility;
 use App\Functions\DiscordOAuthFunction;
 use App\Functions\UserFunction;
 use App\Models\Discord\CurrentUser;
-use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -65,10 +64,15 @@ class AuthAction
 
         $token = $this->discord_auth->fetchAccessToken($code);
         $discord_token = $this->discord_auth->storeToken(
-            $token['access_token'], $token['refresh_token'], $token['expires_in']);
+            $token['access_token'],
+            $token['refresh_token'],
+            $this->auth_util->convertExpiresIn($token['expires_in']));
         $app_code = $this->app_auth->makeCode();
         $app = $this->app_auth->storeState(
-            $discord->auth_client_id, $discord->state, $app_code, $discord->code_challenge, $discord_token->id);
+            $discord->auth_client_id,
+            $discord->state, $app_code,
+            $discord->code_challenge,
+            $discord_token->id);
         return $this->app_auth->callbackApp($app->state, $app_code);
     }
 
@@ -89,22 +93,20 @@ class AuthAction
 
         $access_token = $this->auth_util->makeToken();
         $refresh_token = $this->auth_util->makeToken();
-        $now = Carbon::now();
-        $expires_in = $now->copy()->addWeek();
-        $diff = $now->diffInSeconds($expires_in);
+        [$expires_in, $expires_in_carbon] = $this->auth_util->makeExpiresIn();
 
         $this->app_auth->storeToken(
             $user->id,
             $state->discord_token_id,
             Hash::make($access_token),
             Hash::make($refresh_token),
-            $expires_in
+            $expires_in_carbon
         );
 
         return response()->json([
             'access_token' => $access_token,
             'refresh_token' => $refresh_token,
-            'expires_in' => $diff
+            'expires_in' => $expires_in
         ]);
     }
 }

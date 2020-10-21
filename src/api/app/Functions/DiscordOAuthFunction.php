@@ -4,6 +4,7 @@ namespace App\Functions;
 
 use App\Models\OAuth\DiscordAuth;
 use App\Models\OAuth\DiscordToken;
+use Carbon\Carbon;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -55,13 +56,13 @@ class DiscordOAuthFunction
      * トークンを保存
      * @param string $access_token
      * @param string $refresh_token
-     * @param string $expires_in
+     * @param Carbon $expires_in
      * @return DiscordToken
      */
     public function storeToken(
         string $access_token,
         string $refresh_token,
-        string $expires_in
+        Carbon $expires_in
     ): DiscordToken
     {
         return DiscordToken::create([

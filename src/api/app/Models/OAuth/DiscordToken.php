@@ -34,6 +34,7 @@ class DiscordToken extends Model
 
     public function getIsExpiresAttributes()
     {
+        // todo carbon型へ正しく変換
         $date = new Carbon($this->expires_in);
         return $date->lt(Carbon::now());
     }
