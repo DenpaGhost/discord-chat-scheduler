@@ -13,7 +13,6 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 
 class AuthAction
 {
@@ -29,7 +28,11 @@ class AuthAction
      * @param UserFunction $user_func
      * @param AuthUtility $auth_util
      */
-    public function __construct(AppOAuthFunction $app_auth, DiscordOAuthFunction $discord_auth, UserFunction $user_func, AuthUtility $auth_util)
+    public function __construct(
+        AppOAuthFunction $app_auth,
+        DiscordOAuthFunction $discord_auth,
+        UserFunction $user_func,
+        AuthUtility $auth_util)
     {
         $this->app_auth = $app_auth;
         $this->discord_auth = $discord_auth;
@@ -64,12 +67,14 @@ class AuthAction
         if ($discord === null) throw new ModelNotFoundException();
 
         $token = $this->discord_auth->fetchAccessToken($code);
-        Log::channel('single')->info($token['access_token']);
+        $discord_token = $this->discord_auth->findByAccessToken($token['access_token']);
+        if ($discord_token === null) {
+            $discord_token = $this->discord_auth->storeToken(
+                $token['access_token'],
+                $token['refresh_token'],
+                $this->auth_util->convertExpiresIn($token['expires_in']));
+        }
 
-        $discord_token = $this->discord_auth->storeToken(
-            $token['access_token'],
-            $token['refresh_token'],
-            $this->auth_util->convertExpiresIn($token['expires_in']));
         $app_code = $this->app_auth->makeCode();
         $app = $this->app_auth->storeState(
             $discord->auth_client_id,
@@ -77,6 +82,8 @@ class AuthAction
             $app_code,
             $discord->code_challenge,
             $discord_token->id);
+
+        $discord->delete();
         return $this->app_auth->callbackApp($app->state, $app_code);
     }
 

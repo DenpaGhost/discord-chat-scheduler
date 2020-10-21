@@ -42,6 +42,7 @@ class DiscordAuth extends Model
     /**
      * @param Builder $query
      * @param string $state
+     * @return Builder
      */
     public function scopeDiscordState($query, string $state)
     {

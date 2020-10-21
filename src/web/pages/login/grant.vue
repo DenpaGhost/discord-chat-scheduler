@@ -9,12 +9,12 @@ import Axios from "axios";
 @Component
 export default class grant extends Vue {
   async mounted() {
-    const state = sessionStorage.getItem('state');
-    const verifier = sessionStorage.getItem('verifier');
+    const state = localStorage.getItem('state');
+    const verifier = localStorage.getItem('verifier');
     const code = this.$route.query.code;
 
-    sessionStorage.removeItem('state');
-    sessionStorage.removeItem('verifier');
+    localStorage.removeItem('state');
+    localStorage.removeItem('verifier');
 
     if (state != this.$route.query.state) {
       console.error('認可エラー');

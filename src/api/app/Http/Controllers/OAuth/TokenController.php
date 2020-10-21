@@ -13,6 +13,15 @@ class TokenController extends Controller
     private AuthAction $action;
 
     /**
+     * TokenController constructor.
+     * @param AuthAction $action
+     */
+    public function __construct(AuthAction $action)
+    {
+        $this->action = $action;
+    }
+
+    /**
      * @param Request $request
      * @return JsonResponse
      * @throws AuthenticationException

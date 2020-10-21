@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\OAuth;
 
 use App\Actions\AuthAction;
-use App\Functions\DiscordOAuthFunction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

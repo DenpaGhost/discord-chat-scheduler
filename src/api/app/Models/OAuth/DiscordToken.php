@@ -4,6 +4,7 @@ namespace App\Models\OAuth;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -36,5 +37,15 @@ class DiscordToken extends Model
     {
         $date = new Carbon($this->expires_in);
         return $date->lt(Carbon::now());
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $token
+     * @return Builder
+     */
+    public function scopeAccessToken($query, $token)
+    {
+        return $query->where('access_token', $token);
     }
 }

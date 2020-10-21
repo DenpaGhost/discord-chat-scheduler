@@ -45,11 +45,20 @@ class DiscordOAuthFunction
     /**
      * Discordで認可処理が開始されている情報をstate検索
      * @param $state
-     * @return DiscordAuth
+     * @return DiscordAuth|null
      */
     public function findByDiscordState($state): ?DiscordAuth
     {
         return DiscordAuth::discordState($state)->first();
+    }
+
+    /**
+     * @param $access_token
+     * @return DiscordAuth|null
+     */
+    public function findByAccessToken($access_token): ?DiscordToken
+    {
+        return DiscordToken::accessToken($access_token)->first();
     }
 
     /**
