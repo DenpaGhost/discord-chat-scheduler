@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 /**
  * Class User
@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -27,11 +27,12 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
+     * @param Builder $query
+     * @param string $discord_id
+     * @return Builder
      */
-    protected $hidden = [
-        'remember_token'
-    ];
+    public function scopeDiscordId($query, string $discord_id)
+    {
+        return $query->where('discord_id', $discord_id);
+    }
 }

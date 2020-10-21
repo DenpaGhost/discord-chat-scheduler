@@ -51,11 +51,22 @@ class AppOAuthFunction
      * stateから認可待ちデータの取得
      *
      * @param string $state
-     * @return Auth
+     * @return Auth|null
      */
-    public function findByState(string $state)
+    public function findByState(string $state): ?Auth
     {
         return Auth::state($state)->first();
+    }
+
+    /**
+     * codeから認可待ちデータの取得
+     *
+     * @param string $code
+     * @return Auth|null
+     */
+    public function findByCode(string $code): ?Auth
+    {
+        return Auth::code($code)->first();
     }
 
     /**
@@ -131,5 +142,13 @@ class AppOAuthFunction
     public function makeState(): string
     {
         return Str::random(40);
+    }
+
+    /**
+     * @return string
+     */
+    public function makeToken(): string
+    {
+        return Str::random(127);
     }
 }

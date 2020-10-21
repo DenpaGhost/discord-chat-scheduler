@@ -16,6 +16,8 @@ use Illuminate\Database\Query\Builder;
  * @property-read string $code
  * @property-read string $code_challenge
  * @property-read int $discord_token_id
+ * @property-read AuthClient $client
+ * @property-read DiscordToken $discordToken
  */
 class Auth extends Model
 {
@@ -31,7 +33,12 @@ class Auth extends Model
 
     public function client()
     {
-        return $this->belongsTo(AuthClient::class);
+        return $this->belongsTo(AuthClient::class, 'client_id');
+    }
+
+    public function discordToken()
+    {
+        return $this->belongsTo(DiscordToken::class, 'discord_token_id');
     }
 
     /**
@@ -42,5 +49,15 @@ class Auth extends Model
     public function scopeState($query, $state)
     {
         return $query->where('state', $state);
+    }
+
+    /**
+     * @param Builder $query
+     * @param $code
+     * @return Builder
+     */
+    public function scopeCode($query, $code)
+    {
+        return $query->where('code', $code);
     }
 }
