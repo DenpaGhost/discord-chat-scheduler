@@ -11,8 +11,8 @@ use App\Functions\UserFunction;
 use App\Models\Discord\CurrentUser;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
 
 class AuthAction
 {
@@ -76,6 +76,14 @@ class AuthAction
         return $this->app_auth->callbackApp($app->state, $app_code);
     }
 
+    /**
+     * アクセストークンの発行
+     *
+     * @param string $code
+     * @param string $verifier
+     * @return JsonResponse
+     * @throws AuthenticationException
+     */
     public function grantToken(string $code, string $verifier)
     {
         $state = $this->app_auth->findByCode($code);
@@ -98,8 +106,8 @@ class AuthAction
         $this->app_auth->storeToken(
             $user->id,
             $state->discord_token_id,
-            Hash::make($access_token),
-            Hash::make($refresh_token),
+            $access_token,
+            $refresh_token,
             $expires_in_carbon
         );
 
