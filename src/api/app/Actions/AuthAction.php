@@ -60,7 +60,7 @@ class AuthAction
      */
     public function makeCode(string $discord_state, string $code)
     {
-        $discord = $this->discord_auth->findByState($discord_state);
+        $discord = $this->discord_auth->findByDiscordState($discord_state);
         if ($discord === null) throw new ModelNotFoundException();
 
         $token = $this->discord_auth->fetchAccessToken($code);
@@ -73,7 +73,8 @@ class AuthAction
         $app_code = $this->app_auth->makeCode();
         $app = $this->app_auth->storeState(
             $discord->auth_client_id,
-            $discord->state, $app_code,
+            $discord->state,
+            $app_code,
             $discord->code_challenge,
             $discord_token->id);
         return $this->app_auth->callbackApp($app->state, $app_code);

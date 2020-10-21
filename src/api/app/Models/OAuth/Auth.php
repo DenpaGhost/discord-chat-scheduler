@@ -28,7 +28,7 @@ class Auth extends Model
         'state',
         'code',
         'code_challenge',
-        'discord_oauth_state'
+        'discord_token_id'
     ];
 
     public function client()

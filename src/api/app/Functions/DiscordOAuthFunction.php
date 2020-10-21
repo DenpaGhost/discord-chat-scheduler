@@ -47,9 +47,9 @@ class DiscordOAuthFunction
      * @param $state
      * @return DiscordAuth
      */
-    public function findByState($state): DiscordAuth
+    public function findByDiscordState($state): ?DiscordAuth
     {
-        return DiscordAuth::state($state)->first();
+        return DiscordAuth::discordState($state)->first();
     }
 
     /**
@@ -79,7 +79,7 @@ class DiscordOAuthFunction
         $client_id = env('DISCORD_CLIENT_ID');
         $redirect_uri = urlencode(env('DISCORD_REDIRECT'));
         return redirect()->away(
-            "https://discord.com/api/oauth2/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=identify"
+            "https://discord.com/api/oauth2/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=identify&state=$state"
         );
     }
 
