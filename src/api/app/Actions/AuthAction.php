@@ -105,7 +105,7 @@ class AuthAction
         if (!$this->app_auth->verify($verifier, $state->code_challenge))
             throw new AuthenticationException();
 
-        $discord_user = new CurrentUser($state->discordToken);
+        $discord_user = new CurrentUser($state->discordToken, $this->discord_auth, $this->auth_util);
 
         $user = $this->user_func->findByDiscordId($discord_user->getId());
         if ($user === null)
