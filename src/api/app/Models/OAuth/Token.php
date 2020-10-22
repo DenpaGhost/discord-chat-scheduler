@@ -16,6 +16,8 @@ use Illuminate\Database\Query\Builder;
  * @property-read int $discord_token_id
  * @property string $access_token
  * @property string $refresh_token
+ * @property string $auth_client_id
+ * @property-read AuthClient $authClient
  * @property $expires_in
  */
 class Token extends Model
@@ -25,6 +27,7 @@ class Token extends Model
     protected $fillable = [
         'user_id',
         'discord_token_id',
+        'auth_client_id',
         'access_token',
         'refresh_token',
         'expires_in'
@@ -37,6 +40,11 @@ class Token extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function authClient()
+    {
+        return $this->belongsTo(AuthClient::class, 'auth_client_id');
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models\OAuth;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder;
 
 /**
  * Class AuthClient
@@ -15,4 +16,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class AuthClient extends Model
 {
     use HasFactory;
+
+    /**
+     * @param Builder $query
+     * @param string $id
+     * @return Builder
+     */
+    public function scopeId($query, string $id)
+    {
+        return $query->where('id', $id);
+    }
 }

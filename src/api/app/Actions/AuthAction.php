@@ -96,18 +96,33 @@ class AuthAction
     }
 
     /**
+     * Authクライアントの存在確認
+     * @param string $id
+     */
+    public function validateAuthClientId(string $id)
+    {
+        if (!$this->app_auth->isClientExistById($id))
+            throw new ModelNotFoundException();
+    }
+
+    /**
      * アクセストークンの発行
      *
+     * @param string $auth_client_id
      * @param string $code
      * @param string $verifier
      * @return JsonResponse
      * @throws AuthenticationException
      */
-    public function grantToken(string $code, string $verifier)
+    public function grantToken(string $auth_client_id, string $code, string $verifier)
     {
         $state = $this->app_auth->findAuthByCode($code);
         if ($state === null) {
             throw new ModelNotFoundException();
+        }
+
+        if ($state->client_id !== $auth_client_id) {
+            throw new AuthenticationException();
         }
 
         if (!$this->app_auth->verify($verifier, $state->code_challenge)) {
@@ -117,7 +132,7 @@ class AuthAction
 
         if ($state->expires_in->lt(Carbon::now())) {
             $this->app_auth->deleteState($state->id);
-            throw new AuthenticationException('code has expired');
+            throw new AuthenticationException();
         }
 
         $discord_user = new CurrentUser($state->discordToken, $this->discord_auth, $this->auth_util);
@@ -133,6 +148,7 @@ class AuthAction
         $this->app_auth->storeToken(
             $user->id,
             $state->discord_token_id,
+            $auth_client_id,
             $access_token,
             $refresh_token,
             $expires_in_carbon
@@ -148,24 +164,29 @@ class AuthAction
     }
 
     /**
+     * @param string $auth_client_id
      * @param string $refresh_token
      * @return JsonResponse
+     * @throws AuthenticationException
      */
-    public function refreshToken(string $refresh_token)
+    public function refreshToken(string $auth_client_id, string $refresh_token)
     {
         $token = $this->app_auth->findTokenByRefreshToken($refresh_token);
+        if ($token->auth_client_id !== $auth_client_id) {
+            throw new AuthenticationException();
+        }
 
         $access_token = $this->auth_util->makeToken();
-        $refresh_token = $this->auth_util->makeToken();
+        $new_refresh_token = $this->auth_util->makeToken();
         [$expires_in, $expires_in_carbon] = $this->auth_util->makeTokenExpiresIn();
 
         $token->access_token = $access_token;
-        $token->refresh_token = $refresh_token;
+        $token->refresh_token = $new_refresh_token;
         $token->expires_in = $expires_in_carbon;
 
         return response()->json([
             'access_token' => $access_token,
-            'refresh_token' => $refresh_token,
+            'refresh_token' => $new_refresh_token,
             'expires_in' => $expires_in
         ]);
     }

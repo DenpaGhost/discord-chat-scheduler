@@ -30,6 +30,14 @@ export default class grant extends Vue {
 
     console.log(data);
 
+    const {data: refreshed} = await Axios.post(`${process.env.OAUTH_GRANT_URI}`, {
+      grant_type: 'refresh_token',
+      client_id: process.env.OAUTH_CLIENT_ID,
+      refresh_token: data.refresh_token
+    });
+
+    console.log(refreshed);
+
     // localStorage.setItem('expires_in', data.expires_in);
     // localStorage.setItem('refresh_token', data.refresh_token);
   }

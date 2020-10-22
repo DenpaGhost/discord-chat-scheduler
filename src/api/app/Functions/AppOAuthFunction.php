@@ -4,6 +4,7 @@
 namespace App\Functions;
 
 use App\Models\OAuth\Auth;
+use App\Models\OAuth\AuthClient;
 use App\Models\OAuth\Token;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -82,10 +83,31 @@ class AppOAuthFunction
     }
 
     /**
+     * Authクライアントの取得
+     * @param string $id
+     * @return AuthClient|null
+     */
+    public function findClientById(string $id): ?AuthClient
+    {
+        return AuthClient::id($id)->first();
+    }
+
+    /**
+     * Authクライアントの存在確認
+     * @param string $id
+     * @return bool
+     */
+    public function isClientExistById(string $id): bool
+    {
+        return $this->findClientById($id) !== null;
+    }
+
+    /**
      * トークンの保存
      *
      * @param int $user_id
      * @param int $discord_token_id
+     * @param string $auth_client_id
      * @param string $access_token
      * @param string $refresh_token
      * @param Carbon $expires_in
@@ -94,6 +116,7 @@ class AppOAuthFunction
     public function storeToken(
         int $user_id,
         int $discord_token_id,
+        string $auth_client_id,
         string $access_token,
         string $refresh_token,
         Carbon $expires_in
@@ -102,6 +125,7 @@ class AppOAuthFunction
         return Token::create([
             'user_id' => $user_id,
             'discord_token_id' => $discord_token_id,
+            'auth_client_id' => $auth_client_id,
             'access_token' => $access_token,
             'refresh_token' => $refresh_token,
             'expires_in' => $expires_in
