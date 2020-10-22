@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\OAuth\TokenController;
+use App\Http\Controllers\Auth\TokenController;
 use Illuminate\Support\Facades\Route;
 
 /*

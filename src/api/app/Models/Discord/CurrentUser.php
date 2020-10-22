@@ -4,8 +4,8 @@
 namespace App\Models\Discord;
 
 
-use App\Functions\AuthUtility;
-use App\Functions\DiscordAuthFunction;
+use App\Functions\Auth\AuthUtility;
+use App\Functions\Auth\DiscordAuthFunction;
 use App\Models\Auth\DiscordToken;
 use Carbon\Carbon;
 use Illuminate\Http\Client\PendingRequest;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Functions;
+namespace App\Functions\Auth;
 
 use App\Models\Auth\DiscordAuth;
 use App\Models\Auth\DiscordToken;

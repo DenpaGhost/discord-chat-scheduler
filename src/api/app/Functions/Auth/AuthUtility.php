@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Functions;
+namespace App\Functions\Auth;
 
 
 use Carbon\Carbon;

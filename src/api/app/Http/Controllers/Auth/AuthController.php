@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\OAuth;
+namespace App\Http\Controllers\Auth;
 
-use App\Actions\AuthAction;
+use App\Actions\Auth\AuthAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Actions;
+namespace App\Actions\Auth;
 
 
-use App\Functions\AppAuthFunction;
-use App\Functions\AuthUtility;
-use App\Functions\DiscordAuthFunction;
+use App\Functions\Auth\AppAuthFunction;
+use App\Functions\Auth\AuthUtility;
+use App\Functions\Auth\DiscordAuthFunction;
 use App\Functions\UserFunction;
 use App\Models\Discord\CurrentUser;
 use Carbon\Carbon;
