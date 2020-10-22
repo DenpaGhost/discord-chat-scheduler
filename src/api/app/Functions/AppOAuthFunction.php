@@ -62,7 +62,7 @@ class AppOAuthFunction
      * @param string $state
      * @return Auth|null
      */
-    public function findByState(string $state): ?Auth
+    public function findAuthByState(string $state): ?Auth
     {
         return Auth::state($state)->first();
     }
@@ -73,7 +73,7 @@ class AppOAuthFunction
      * @param string $code
      * @return Auth|null
      */
-    public function findByCode(string $code): ?Auth
+    public function findAuthByCode(string $code): ?Auth
     {
         return Auth::code($code)->first();
     }
@@ -103,6 +103,15 @@ class AppOAuthFunction
             'refresh_token' => $refresh_token,
             'expires_in' => $expires_in
         ]);
+    }
+
+    /**
+     * @param string $refresh_token
+     * @return Token|null
+     */
+    public function findTokenByRefreshToken(string $refresh_token): ?Token
+    {
+        return Token::refreshToken($refresh_token)->first();
     }
 
     /**

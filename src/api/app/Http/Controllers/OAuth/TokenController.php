@@ -36,7 +36,7 @@ class TokenController extends Controller
                 $request->input('code_verifier')
             );
         } else if ($grant_type === 'refresh_token') {
-            // todo トークンリフレッシュアクションの実装
+            $this->action->refreshToken($request->input('refresh_token'));
         }
 
         return response()->json([], 404);

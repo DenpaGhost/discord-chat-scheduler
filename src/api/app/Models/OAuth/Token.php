@@ -5,6 +5,7 @@ namespace App\Models\OAuth;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 
 /**
  * Class Token
@@ -32,5 +33,15 @@ class Token extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $refresh_token
+     * @return Builder
+     */
+    public function scopeRefreshToken($query, string $refresh_token)
+    {
+        return $query->where('refresh_token', $refresh_token);
     }
 }

@@ -98,7 +98,7 @@ class AuthAction
      */
     public function grantToken(string $code, string $verifier)
     {
-        $state = $this->app_auth->findByCode($code);
+        $state = $this->app_auth->findAuthByCode($code);
         if ($state === null)
             throw new ModelNotFoundException();
 
@@ -124,6 +124,29 @@ class AuthAction
         );
 
         $this->app_auth->deleteState($state->id);
+
+        return response()->json([
+            'access_token' => $access_token,
+            'refresh_token' => $refresh_token,
+            'expires_in' => $expires_in
+        ]);
+    }
+
+    /**
+     * @param string $refresh_token
+     * @return JsonResponse
+     */
+    public function refreshToken(string $refresh_token)
+    {
+        $token = $this->app_auth->findTokenByRefreshToken($refresh_token);
+
+        $access_token = $this->auth_util->makeToken();
+        $refresh_token = $this->auth_util->makeToken();
+        [$expires_in, $expires_in_carbon] = $this->auth_util->makeExpiresIn();
+
+        $token->access_token = $access_token;
+        $token->refresh_token = $refresh_token;
+        $token->expires_in = $expires_in_carbon;
 
         return response()->json([
             'access_token' => $access_token,
