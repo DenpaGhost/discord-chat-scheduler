@@ -97,7 +97,7 @@ class DiscordAuthFunction
         $client_id = env('DISCORD_CLIENT_ID');
         $redirect_uri = urlencode(env('DISCORD_REDIRECT'));
         return redirect()->away(
-            "https://discord.com/api/oauth2/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=identify&state=$state"
+            "https://discord.com/api/oauth2/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=code&scope=identify%20guilds&state=$state"
         );
     }
 
