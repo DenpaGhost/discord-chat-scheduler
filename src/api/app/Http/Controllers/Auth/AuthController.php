@@ -4,21 +4,47 @@ namespace App\Http\Controllers\Auth;
 
 use App\Actions\Auth\AuthAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\AuthorizationRequest;
+use App\Http\Requests\Auth\CallbackRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function start(Request $request, AuthAction $action)
+    private AuthAction $action;
+
+    /**
+     * AuthController constructor.
+     * @param AuthAction $action
+     */
+    public function __construct(AuthAction $action)
     {
-        // todo フォームリクエストバリデーションをつくる
-        return $action->startDiscordAuthorizing(
+        $this->action = $action;
+    }
+
+    /**
+     * 認可処理のスタート
+     * @param AuthorizationRequest $request
+     * @return RedirectResponse
+     */
+    public function start(AuthorizationRequest $request)
+    {
+        $client_id = $request->input('client_id');
+        $this->action->validateAuthClientId($client_id);
+
+        return $this->action->startDiscordAuthorizing(
             $request->input('client_id'),
             $request->input('state'),
             $request->input('code_challenge'));
     }
 
-    public function callback(Request $request, AuthAction $action)
+    /**
+     * Discord認可後のリダイレクトを受ける
+     * @param CallbackRequest $request
+     * @return RedirectResponse
+     */
+    public function callback(CallbackRequest $request)
     {
-        return $action->makeCode($request->input('state'), $request->input('code'));
+        return $this->action->makeCode($request->input('state'), $request->input('code'));
     }
 }

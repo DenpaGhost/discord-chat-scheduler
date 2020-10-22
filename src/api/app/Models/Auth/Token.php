@@ -18,6 +18,7 @@ use Illuminate\Database\Query\Builder;
  * @property string $refresh_token
  * @property string $auth_client_id
  * @property-read AuthClient $authClient
+ * @property-read User $user
  * @property $expires_in
  */
 class Token extends Model
@@ -45,6 +46,16 @@ class Token extends Model
     public function authClient()
     {
         return $this->belongsTo(AuthClient::class, 'auth_client_id');
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $access_token
+     * @return Builder
+     */
+    public function scopeAccessToken($query, string $access_token)
+    {
+        return $query->where('access_token', $access_token);
     }
 
     /**
