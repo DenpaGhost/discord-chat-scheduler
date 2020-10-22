@@ -2,6 +2,7 @@
 
 namespace App\Models\OAuth;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
@@ -18,6 +19,7 @@ use Illuminate\Database\Query\Builder;
  * @property-read int $discord_token_id
  * @property-read AuthClient $client
  * @property-read DiscordToken $discordToken
+ * @property-read Carbon $expires_in
  */
 class Auth extends Model
 {
@@ -28,7 +30,12 @@ class Auth extends Model
         'state',
         'code',
         'code_challenge',
-        'discord_token_id'
+        'discord_token_id',
+        'expires_in'
+    ];
+
+    protected $dates = [
+        'expires_in'
     ];
 
     public function client()

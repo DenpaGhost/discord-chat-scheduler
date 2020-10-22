@@ -26,6 +26,11 @@ class DiscordToken extends Model
         'refresh_token',
         'expires_in'
     ];
+
+    protected $dates = [
+        'expires_in'
+    ];
+
     protected $appends = ['is_expires'];
 
     public function token()

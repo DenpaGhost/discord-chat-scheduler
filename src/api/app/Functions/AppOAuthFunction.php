@@ -28,6 +28,7 @@ class AppOAuthFunction
      * @param string $code
      * @param string $code_challenge
      * @param string $discord_token_id
+     * @param Carbon $expires_in
      * @return Auth
      */
     public function storeState(
@@ -35,7 +36,8 @@ class AppOAuthFunction
         string $state,
         string $code,
         string $code_challenge,
-        string $discord_token_id
+        string $discord_token_id,
+        Carbon $expires_in
     ): Auth
     {
         return Auth::create([
@@ -43,7 +45,8 @@ class AppOAuthFunction
             'state' => $state,
             'code' => $code,
             'code_challenge' => $code_challenge,
-            'discord_token_id' => $discord_token_id
+            'discord_token_id' => $discord_token_id,
+            'expires_in' => $expires_in
         ]);
     }
 

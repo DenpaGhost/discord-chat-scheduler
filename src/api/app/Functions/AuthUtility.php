@@ -22,11 +22,21 @@ class AuthUtility
     /**
      * @return array [int, Carbon]
      */
-    public function makeExpiresIn()
+    public function makeTokenExpiresIn()
     {
         $now = Carbon::now();
         $week_ago = $now->copy()->addWeek();
         return [$now->diffInSeconds($week_ago), $week_ago];
+    }
+
+    /**
+     * @return array [int, Carbon]
+     */
+    public function makeCodeExpiresIn()
+    {
+        $now = Carbon::now();
+        $expires_in = $now->copy()->addMinutes(30);
+        return [$now->diffInSeconds($expires_in), $expires_in];
     }
 
     /**

@@ -9,10 +9,12 @@ use App\Functions\AuthUtility;
 use App\Functions\DiscordOAuthFunction;
 use App\Functions\UserFunction;
 use App\Models\Discord\CurrentUser;
+use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 
 class AuthAction
 {
@@ -76,12 +78,17 @@ class AuthAction
         }
 
         $app_code = $this->app_auth->makeCode();
+        [, $expires_in] = $this->auth_util->makeCodeExpiresIn();
+
+        Log::channel('single')->info($expires_in);
+
         $app = $this->app_auth->storeState(
             $discord->auth_client_id,
             $discord->state,
             $app_code,
             $discord->code_challenge,
-            $discord_token->id);
+            $discord_token->id,
+            $expires_in);
 
         $this->discord_auth->deleteState($discord->id);
 
@@ -99,11 +106,19 @@ class AuthAction
     public function grantToken(string $code, string $verifier)
     {
         $state = $this->app_auth->findAuthByCode($code);
-        if ($state === null)
+        if ($state === null) {
             throw new ModelNotFoundException();
+        }
 
-        if (!$this->app_auth->verify($verifier, $state->code_challenge))
+        if (!$this->app_auth->verify($verifier, $state->code_challenge)) {
+            $this->app_auth->deleteState($state->id);
             throw new AuthenticationException();
+        }
+
+        if ($state->expires_in->lt(Carbon::now())) {
+            $this->app_auth->deleteState($state->id);
+            throw new AuthenticationException('code has expired');
+        }
 
         $discord_user = new CurrentUser($state->discordToken, $this->discord_auth, $this->auth_util);
 
@@ -113,7 +128,7 @@ class AuthAction
 
         $access_token = $this->auth_util->makeToken();
         $refresh_token = $this->auth_util->makeToken();
-        [$expires_in, $expires_in_carbon] = $this->auth_util->makeExpiresIn();
+        [$expires_in, $expires_in_carbon] = $this->auth_util->makeTokenExpiresIn();
 
         $this->app_auth->storeToken(
             $user->id,
@@ -142,7 +157,7 @@ class AuthAction
 
         $access_token = $this->auth_util->makeToken();
         $refresh_token = $this->auth_util->makeToken();
-        [$expires_in, $expires_in_carbon] = $this->auth_util->makeExpiresIn();
+        [$expires_in, $expires_in_carbon] = $this->auth_util->makeTokenExpiresIn();
 
         $token->access_token = $access_token;
         $token->refresh_token = $refresh_token;

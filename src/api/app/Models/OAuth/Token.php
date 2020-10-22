@@ -30,6 +30,10 @@ class Token extends Model
         'expires_in'
     ];
 
+    protected $dates = [
+        'expires_in'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

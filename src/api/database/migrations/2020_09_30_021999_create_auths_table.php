@@ -24,6 +24,7 @@ class CreateAuthsTable extends Migration
             $table->foreignId('discord_token_id')
                 ->constrained('discord_tokens')
                 ->onDelete('cascade');
+            $table->dateTime('expires_in');
             $table->timestamps();
         });
     }

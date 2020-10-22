@@ -51,7 +51,7 @@ class CurrentUser
      */
     protected function _getCurrentUser()
     {
-        if (Carbon::now()->lt($this->token->expires_in->addDays(6))) {
+        if (Carbon::now()->gt($this->token->expires_in->subDay())) {
             $this->refreshToken();
         }
 
@@ -86,5 +86,6 @@ class CurrentUser
         $this->token->refresh_token = $response['refresh_token'];
         $this->token->expires_in = $this->auth_util->convertExpiresIn($response['expires_in']);
         $this->token->save();
+        $this->http_client = Http::baseUrl('https://discord.com/api')->withToken($this->token->access_token);
     }
 }
