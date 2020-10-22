@@ -4,9 +4,9 @@
 namespace App\Actions;
 
 
-use App\Functions\AppOAuthFunction;
+use App\Functions\AppAuthFunction;
 use App\Functions\AuthUtility;
-use App\Functions\DiscordOAuthFunction;
+use App\Functions\DiscordAuthFunction;
 use App\Functions\UserFunction;
 use App\Models\Discord\CurrentUser;
 use Carbon\Carbon;
@@ -18,21 +18,21 @@ use Illuminate\Support\Facades\Log;
 
 class AuthAction
 {
-    private AppOAuthFunction $app_auth;
-    private DiscordOAuthFunction $discord_auth;
+    private AppAuthFunction $app_auth;
+    private DiscordAuthFunction $discord_auth;
     private UserFunction $user_func;
     private AuthUtility $auth_util;
 
     /**
      * AuthAction constructor.
-     * @param AppOAuthFunction $app_auth
-     * @param DiscordOAuthFunction $discord_auth
+     * @param AppAuthFunction $app_auth
+     * @param DiscordAuthFunction $discord_auth
      * @param UserFunction $user_func
      * @param AuthUtility $auth_util
      */
     public function __construct(
-        AppOAuthFunction $app_auth,
-        DiscordOAuthFunction $discord_auth,
+        AppAuthFunction $app_auth,
+        DiscordAuthFunction $discord_auth,
         UserFunction $user_func,
         AuthUtility $auth_util)
     {

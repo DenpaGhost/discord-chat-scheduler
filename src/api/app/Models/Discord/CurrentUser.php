@@ -5,7 +5,7 @@ namespace App\Models\Discord;
 
 
 use App\Functions\AuthUtility;
-use App\Functions\DiscordOAuthFunction;
+use App\Functions\DiscordAuthFunction;
 use App\Models\OAuth\DiscordToken;
 use Carbon\Carbon;
 use Illuminate\Http\Client\PendingRequest;
@@ -17,16 +17,16 @@ class CurrentUser
     protected PendingRequest $http_client;
     protected DiscordToken $token;
     protected ?Response $_user = null;
-    protected DiscordOAuthFunction $discord_auth;
+    protected DiscordAuthFunction $discord_auth;
     protected AuthUtility $auth_util;
 
     /**
      * CurrentUser constructor.
      * @param DiscordToken $token
-     * @param DiscordOAuthFunction $discord_auth
+     * @param DiscordAuthFunction $discord_auth
      * @param AuthUtility $auth_util
      */
-    public function __construct(DiscordToken $token, DiscordOAuthFunction $discord_auth, AuthUtility $auth_util)
+    public function __construct(DiscordToken $token, DiscordAuthFunction $discord_auth, AuthUtility $auth_util)
     {
         $this->token = $token;
         $this->http_client = Http::baseUrl('https://discord.com/api')->withToken($this->token->access_token);

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Http;
  *
  * @package App\Functions
  */
-class DiscordOAuthFunction
+class DiscordAuthFunction
 {
     // store information to our database
 

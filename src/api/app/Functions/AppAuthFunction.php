@@ -17,7 +17,7 @@ use Illuminate\Support\Str;
  *
  * @package App\Functions
  */
-class AppOAuthFunction
+class AppAuthFunction
 {
     // store information
 
