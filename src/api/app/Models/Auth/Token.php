@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\OAuth;
+namespace App\Models\Auth;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

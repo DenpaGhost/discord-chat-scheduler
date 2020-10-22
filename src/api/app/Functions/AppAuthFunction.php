@@ -3,9 +3,9 @@
 
 namespace App\Functions;
 
-use App\Models\OAuth\Auth;
-use App\Models\OAuth\AuthClient;
-use App\Models\OAuth\Token;
+use App\Models\Auth\Auth;
+use App\Models\Auth\AuthClient;
+use App\Models\Auth\Token;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;

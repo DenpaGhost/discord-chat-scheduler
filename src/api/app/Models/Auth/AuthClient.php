@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\OAuth;
+namespace App\Models\Auth;
 
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -2,8 +2,8 @@
 
 namespace App\Functions;
 
-use App\Models\OAuth\DiscordAuth;
-use App\Models\OAuth\DiscordToken;
+use App\Models\Auth\DiscordAuth;
+use App\Models\Auth\DiscordToken;
 use Carbon\Carbon;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
