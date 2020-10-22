@@ -83,7 +83,8 @@ class AuthAction
             $discord->code_challenge,
             $discord_token->id);
 
-        $discord->delete();
+        $this->discord_auth->deleteState($discord->id);
+
         return $this->app_auth->callbackApp($app->state, $app_code);
     }
 
@@ -122,7 +123,7 @@ class AuthAction
             $expires_in_carbon
         );
 
-        $state->delete();
+        $this->app_auth->deleteState($state->id);
 
         return response()->json([
             'access_token' => $access_token,

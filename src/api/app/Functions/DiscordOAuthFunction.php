@@ -62,6 +62,15 @@ class DiscordOAuthFunction
     }
 
     /**
+     * @param int $id
+     * @return bool
+     */
+    public function deleteState(int $id): bool
+    {
+        return DiscordAuth::destroy($id);
+    }
+
+    /**
      * トークンを保存
      * @param string $access_token
      * @param string $refresh_token

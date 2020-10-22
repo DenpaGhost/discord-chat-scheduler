@@ -48,6 +48,15 @@ class AppOAuthFunction
     }
 
     /**
+     * @param int $id
+     * @return bool
+     */
+    public function deleteState(int $id): bool
+    {
+        return Auth::destroy($id);
+    }
+
+    /**
      * stateから認可待ちデータの取得
      *
      * @param string $state
