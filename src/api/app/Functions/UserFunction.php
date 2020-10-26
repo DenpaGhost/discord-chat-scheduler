@@ -36,9 +36,10 @@ class UserFunction
      * これを通すことでLaravelのAuth Facadeを使えていい感じになる
      *
      * @param int $user_id
+     * @return bool
      */
     public function auth(int $user_id)
     {
-        Auth::onceUsingId($user_id);
+        return Auth::onceUsingId($user_id);
     }
 }

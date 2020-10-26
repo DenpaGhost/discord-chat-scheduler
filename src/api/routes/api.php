@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\TokenController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,3 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('/auth/token', TokenController::class);
+
+Route::get('/user/@me', function () {
+    return Auth::user();
+})->middleware('authentication');
