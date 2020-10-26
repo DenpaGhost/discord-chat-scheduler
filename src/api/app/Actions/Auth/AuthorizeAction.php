@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
-class AuthAction
+class AuthorizeAction
 {
     private AppAuthFunction $app_auth;
     private DiscordAuthFunction $discord_auth;
@@ -24,7 +24,7 @@ class AuthAction
     private AuthUtility $auth_util;
 
     /**
-     * AuthAction constructor.
+     * AuthorizeAction constructor.
      * @param AppAuthFunction $app_auth
      * @param DiscordAuthFunction $discord_auth
      * @param UserFunction $user_func

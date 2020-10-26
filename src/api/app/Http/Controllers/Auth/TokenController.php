@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Actions\Auth\AuthAction;
+use App\Actions\Auth\AuthorizeAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\TokenGrantRequest;
 use Illuminate\Auth\AuthenticationException;
@@ -11,13 +11,13 @@ use Illuminate\Http\Request;
 
 class TokenController extends Controller
 {
-    private AuthAction $action;
+    private AuthorizeAction $action;
 
     /**
      * TokenController constructor.
-     * @param AuthAction $action
+     * @param AuthorizeAction $action
      */
-    public function __construct(AuthAction $action)
+    public function __construct(AuthorizeAction $action)
     {
         $this->action = $action;
     }
