@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Actions\Auth\AuthAction;
+use App\Actions\Auth\AuthorizeAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\AuthorizationRequest;
 use App\Http\Requests\Auth\CallbackRequest;
@@ -11,13 +11,13 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    private AuthAction $action;
+    private AuthorizeAction $action;
 
     /**
      * AuthController constructor.
-     * @param AuthAction $action
+     * @param AuthorizeAction $action
      */
-    public function __construct(AuthAction $action)
+    public function __construct(AuthorizeAction $action)
     {
         $this->action = $action;
     }

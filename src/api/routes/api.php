@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\TokenController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,4 +14,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/auth/token', TokenController::class);
+Route::resource('/auth/token', TokenController::class)->only(['store', 'destroy']);
+
+Route::get('/user/@me', function () {
+    return Auth::user();
+})->middleware('authentication');

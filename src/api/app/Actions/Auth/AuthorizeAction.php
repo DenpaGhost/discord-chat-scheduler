@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 
-class AuthAction
+class AuthorizeAction
 {
     private AppAuthFunction $app_auth;
     private DiscordAuthFunction $discord_auth;
@@ -24,7 +24,7 @@ class AuthAction
     private AuthUtility $auth_util;
 
     /**
-     * AuthAction constructor.
+     * AuthorizeAction constructor.
      * @param AppAuthFunction $app_auth
      * @param DiscordAuthFunction $discord_auth
      * @param UserFunction $user_func
@@ -189,5 +189,18 @@ class AuthAction
             'refresh_token' => $new_refresh_token,
             'expires_in' => $expires_in
         ]);
+    }
+
+
+    public function expireToken(string $token)
+    {
+        $model = $this->token_func->findTokenByAccessToken($token);
+
+        if ($model === null) {
+            return false;
+        }
+
+        $this->token_func->removeTokenByAccessToken($token);
+        return true;
     }
 }
