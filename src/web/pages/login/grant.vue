@@ -5,6 +5,7 @@
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
 import Axios from "axios";
+import TokenUtility from "~/resources/utilities/TokenUtility";
 
 @Component
 export default class grant extends Vue {
@@ -37,9 +38,10 @@ export default class grant extends Vue {
     });
 
     console.log(user);
+    console.log(TokenUtility.convertExpiresIn(data.expires_in));
 
-    // localStorage.setItem('expires_in', data.expires_in);
-    // localStorage.setItem('refresh_token', data.refresh_token);
+    localStorage.setItem('expires_in', data.expires_in);
+    localStorage.setItem('refresh_token', data.refresh_token);
   }
 }
 </script>
