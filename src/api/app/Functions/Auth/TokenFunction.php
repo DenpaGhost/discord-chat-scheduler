@@ -5,6 +5,7 @@ namespace App\Functions\Auth;
 
 
 use App\Models\Auth\Token;
+use Illuminate\Database\Query\Builder;
 
 class TokenFunction
 {

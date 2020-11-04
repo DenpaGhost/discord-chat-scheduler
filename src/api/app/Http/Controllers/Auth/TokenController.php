@@ -6,8 +6,10 @@ use App\Actions\Auth\AuthorizeAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\TokenGrantRequest;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TokenController extends Controller
 {
@@ -27,7 +29,7 @@ class TokenController extends Controller
      * @return JsonResponse
      * @throws AuthenticationException
      */
-    public function __invoke(TokenGrantRequest $request)
+    public function store(TokenGrantRequest $request)
     {
         $client_id = $request->input('client_id');
 
@@ -49,5 +51,18 @@ class TokenController extends Controller
         }
 
         return response()->json([], 404);
+    }
+
+    /**
+     * @param $token
+     * @return Application|ResponseFactory|Response
+     */
+    public function destroy($token)
+    {
+        if ($this->action->expireToken($token)) {
+            return response('', 200);
+        } else {
+            return response('', 404);
+        }
     }
 }

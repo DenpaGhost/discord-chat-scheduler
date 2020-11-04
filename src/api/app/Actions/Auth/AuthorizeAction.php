@@ -190,4 +190,17 @@ class AuthorizeAction
             'expires_in' => $expires_in
         ]);
     }
+
+
+    public function expireToken(string $token)
+    {
+        $model = $this->token_func->findTokenByAccessToken($token);
+
+        if ($model === null) {
+            return false;
+        }
+
+        $this->token_func->removeTokenByAccessToken($token);
+        return true;
+    }
 }

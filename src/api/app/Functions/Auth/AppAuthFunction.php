@@ -142,6 +142,15 @@ class AppAuthFunction
     }
 
     /**
+     * アクセストークンからトークンオブジェクトを削除
+     * @param string $access_token
+     */
+    public function removeTokenByAccessToken(string $access_token)
+    {
+        Token::accessToken($access_token)->delete();
+    }
+
+    /**
      * code_verifierから計算したハッシュ値がcode_challengeと一致するかを判定
      * @param string $code_verifier
      * @param string $code_challenge
