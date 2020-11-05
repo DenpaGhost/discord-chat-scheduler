@@ -172,6 +172,10 @@ class AuthorizeAction
     public function refreshToken(string $auth_client_id, string $refresh_token)
     {
         $token = $this->app_auth->findTokenByRefreshToken($refresh_token);
+        if ($token === null) {
+            return response()->json(null, 404);
+        }
+
         if ($token->auth_client_id !== $auth_client_id) {
             throw new AuthenticationException();
         }
