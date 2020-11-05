@@ -26,17 +26,6 @@ export default class grant extends Vue {
 
     const token = await Token.store(verifier, code);
 
-    console.log(token);
-
-    const {data: user} = await Axios.get(`http://localhost:8080/api/user/@me`, {
-      headers: {
-        Authorization: token.accessToken
-      }
-    });
-
-    console.log(user);
-    console.log(token.expiresIn);
-
     localStorage.setItem('expires_in_time', token.expiresIn.getTime().toString());
     localStorage.setItem('refresh_token', token.refreshToken);
 
