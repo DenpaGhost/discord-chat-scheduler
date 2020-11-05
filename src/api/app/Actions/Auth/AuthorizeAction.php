@@ -184,6 +184,8 @@ class AuthorizeAction
         $token->refresh_token = $new_refresh_token;
         $token->expires_in = $expires_in_carbon;
 
+        $token->save();
+
         return response()->json([
             'access_token' => $access_token,
             'refresh_token' => $new_refresh_token,
