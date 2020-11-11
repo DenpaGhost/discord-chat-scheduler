@@ -4,8 +4,8 @@
 
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
-import Axios from "axios";
-import Token from "~/resources/Models/Token";
+import {credential} from "~/utils/store-accessor";
+import AuthAction from "~/resources/actions/AuthAction";
 
 @Component
 export default class grant extends Vue {
@@ -20,14 +20,14 @@ export default class grant extends Vue {
     if (state == null
         || verifier == null
         || state != this.$route.query.state) {
-      console.error('認可エラー');
-      return;
+      throw new Error('認可エラー')
     }
 
-    const token = await Token.store(verifier, code);
+    const token = await AuthAction.grantToken(verifier, code);
 
     localStorage.setItem('expires_in_time', token.expiresIn.getTime().toString());
     localStorage.setItem('refresh_token', token.refreshToken);
+    credential.setToken(token);
 
     await this.$router.replace('/dashboard');
   }

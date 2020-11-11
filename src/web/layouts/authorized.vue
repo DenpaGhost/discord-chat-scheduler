@@ -4,24 +4,26 @@
 
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
-import TokenRepository from "~/resources/Repositories/auth/TokenRepository";
+import {credential} from "~/utils/store-accessor";
+import AuthAction from "~/resources/actions/AuthAction";
 
 @Component
 export default class Authorized extends Vue {
   async mounted() {
-    const expiresInTime = localStorage.getItem('expires_in_time');
-    if (TokenRepository.isTokenExpire(expiresInTime)) {
-      await this.$router.replace('/');
-      return;
+    if (!credential.isLoggedIn) {
+      const expiresInTime = localStorage.getItem('expires_in_time');
+      const refreshToken = localStorage.getItem('refresh_token');
+
+      if (!AuthAction.isPossibleRefreshingToken(expiresInTime, refreshToken)) {
+        await this.$router.replace('/');
+        return;
+      }
+
+      const token = await AuthAction.refreshToken(refreshToken);
+
+      localStorage.setItem('expires_in_time', token.expiresIn.getTime().toString());
+      localStorage.setItem('refresh_token', token.refreshToken);
     }
-
-    const refreshToken = localStorage.getItem('refresh_token') as string;
-    const token = await TokenRepository.refreshToken(refreshToken);
-
-    localStorage.setItem('expires_in_time', token.expiresIn.getTime().toString());
-    localStorage.setItem('refresh_token', token.refreshToken);
-
-    console.log(token);
   }
 }
 </script>

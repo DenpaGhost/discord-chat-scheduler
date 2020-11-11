@@ -6,12 +6,19 @@ export default {
         if (expiresInTime == null) {
             return true;
         }
-        return TokenUtility.isExpire(TokenUtility.convertTimeToDate(Number.parseInt(expiresInTime)));
+        return TokenUtility.isExpire(
+            TokenUtility.convertTimeToDate(
+                Number.parseInt(expiresInTime)
+            )
+        );
     },
-    async refreshToken(refreshToken: string): Promise<Token> {
+    refreshToken(refreshToken: string): Promise<Token> {
         return Token.refresh(refreshToken);
     },
-    async logout(accessToken: string): Promise<void> {
-
+    async logout(token: Token): Promise<void> {
+        await token.delete();
+    },
+    storeToken(verifier: string, code: string): Promise<Token> {
+        return Token.store(verifier, code);
     }
 }

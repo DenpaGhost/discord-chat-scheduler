@@ -1,11 +1,6 @@
-import {ActionTree, GetterTree, MutationTree} from 'vuex';
+import {Store} from 'vuex'
+import {initialiseStores} from '~/utils/store-accessor'
 
-export const state = () => ({});
-
-export type RootState = ReturnType<typeof state>;
-
-export const getters: GetterTree<RootState, RootState> = {};
-
-export const mutations: MutationTree<RootState> = {};
-
-export const actions: ActionTree<RootState, RootState> = {};
+const initializer = (store: Store<any>) => initialiseStores(store)
+export const plugins = [initializer]
+export * from '~/utils/store-accessor'

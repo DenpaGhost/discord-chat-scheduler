@@ -1,10 +1,24 @@
-import {ActionTree, GetterTree} from 'vuex';
-import {RootState} from '~/store';
+import {Module, Mutation, VuexModule} from "vuex-module-decorators";
+import Token from "~/resources/Models/Token";
 
-export const state = () => ({});
+export interface iCredential {
+    token?: Token
+}
 
-export type CredentialState = ReturnType<typeof state>;
+@Module({
+    stateFactory: true,
+    namespaced: true,
+    name: 'credential'
+})
+export default class Credential extends VuexModule implements iCredential {
+    token?: Token
 
-export const getters: GetterTree<CredentialState, RootState> = {};
+    @Mutation
+    setToken(token: Token) {
+        this.token = token;
+    }
 
-export const actions: ActionTree<CredentialState, RootState> = {};
+    get isLoggedIn(): boolean {
+        return this.token != undefined;
+    }
+}
