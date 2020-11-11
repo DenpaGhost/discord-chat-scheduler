@@ -19,7 +19,7 @@ export default class Authorized extends Vue {
         return;
       }
 
-      const token = await AuthAction.refreshToken(refreshToken);
+      const token = await AuthAction.refreshToken(refreshToken as string);
 
       localStorage.setItem('expires_in_time', token.expiresIn.getTime().toString());
       localStorage.setItem('refresh_token', token.refreshToken);
