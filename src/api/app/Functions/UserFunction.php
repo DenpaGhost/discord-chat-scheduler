@@ -4,6 +4,7 @@
 namespace App\Functions;
 
 
+use App\Models\Auth\DiscordToken;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,5 +42,14 @@ class UserFunction
     public function auth(int $user_id)
     {
         return Auth::onceUsingId($user_id);
+    }
+
+    /**
+     * @param int $user_id
+     * @return DiscordToken|null
+     */
+    public function getDiscordToken(int $user_id): ?DiscordToken
+    {
+        return DiscordToken::isExpires(false)->userId($user_id)->first();
     }
 }

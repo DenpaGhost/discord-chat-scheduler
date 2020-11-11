@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Auth\Token;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Collection;
 
 /**
  * Class User
@@ -12,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  *
  * @property-read int $id
  * @property-read string $discord_id
+ * @property-read Token[]|Collection $tokens
  */
 class User extends Authenticatable
 {
@@ -34,5 +37,10 @@ class User extends Authenticatable
     public function scopeDiscordId($query, string $discord_id)
     {
         return $query->where('discord_id', $discord_id);
+    }
+
+    public function tokens()
+    {
+        return $this->hasMany(Token::class, 'user_id');
     }
 }

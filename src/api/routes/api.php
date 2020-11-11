@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\TokenController;
+use App\Http\Controllers\Guilds\GuildController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -17,5 +18,11 @@ use Illuminate\Support\Facades\Route;
 Route::resource('/auth/token', TokenController::class)->only(['store', 'destroy']);
 
 Route::get('/user/@me', function () {
-    return Auth::user();
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+    return $user;
 })->middleware('authentication');
+
+Route::resource('/user/guilds', GuildController::class)
+    ->only('index')
+    ->middleware('authentication');

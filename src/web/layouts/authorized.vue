@@ -1,5 +1,10 @@
 <template>
-  <nuxt/>
+  <div v-if="!isRefreshing">
+    <nuxt/>
+  </div>
+  <div v-else>
+    トークン更新中...
+  </div>
 </template>
 
 <script lang="ts">
@@ -9,8 +14,11 @@ import TokenUtility from "~/resources/utilities/TokenUtility";
 
 @Component
 export default class Authorized extends Vue {
+  isRefreshing: boolean = true;
+
   async mounted() {
     if (!credential.isLoggedIn) {
+      this.isRefreshing = true;
       const expiresInTime = localStorage.getItem('expires_in_time');
       const refreshToken = localStorage.getItem('refresh_token');
 
@@ -34,7 +42,9 @@ export default class Authorized extends Vue {
       }
     }
 
-    console.log(await guardApi.client.get('/user/@me'));
+    this.isRefreshing = false;
+
+    console.log(await guardApi.client.get('/user/guilds'));
   }
 }
 </script>

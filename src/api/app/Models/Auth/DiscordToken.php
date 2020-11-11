@@ -53,4 +53,33 @@ class DiscordToken extends Model
     {
         return $query->where('access_token', $token);
     }
+
+    /**
+     * @param Builder $query
+     * @param bool $isExpires
+     * @return Builder
+     */
+    public function scopeIsExpires($query, bool $isExpires = true)
+    {
+        $now = Carbon::now();
+
+        return $query->where(
+            'expires_in',
+            $isExpires ? '<' : '>',
+            $now
+        );
+    }
+
+    /**
+     * @param Builder $query
+     * @param int $user_id
+     * @return Builder
+     */
+    public function scopeUserId($query, int $user_id)
+    {
+        return $query->whereHas('token', function ($query) use ($user_id) {
+            /** @var Builder $query */
+            $query->where('user_id', $user_id);
+        });
+    }
 }

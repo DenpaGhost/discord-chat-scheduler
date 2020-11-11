@@ -18,6 +18,7 @@ use Illuminate\Database\Query\Builder;
  * @property string $refresh_token
  * @property string $auth_client_id
  * @property-read AuthClient $authClient
+ * @property-read DiscordToken $discordToken
  * @property-read User $user
  * @property $expires_in
  */
@@ -46,6 +47,11 @@ class Token extends Model
     public function authClient()
     {
         return $this->belongsTo(AuthClient::class, 'auth_client_id');
+    }
+
+    public function discordToken()
+    {
+        return $this->belongsTo(DiscordToken::class, 'discord_token_id');
     }
 
     /**

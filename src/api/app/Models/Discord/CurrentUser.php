@@ -78,6 +78,18 @@ class CurrentUser
     }
 
     /**
+     * @return Response
+     */
+    public function getGuilds()
+    {
+        if (Carbon::now()->gt($this->token->expires_in->subDay())) {
+            $this->refreshToken();
+        }
+
+        return $this->http_client->get('/users/@me/guilds');
+    }
+
+    /**
      */
     protected function refreshToken()
     {
