@@ -8,7 +8,11 @@ export default {
     buildModules: ['@nuxt/typescript-build', '@nuxtjs/dotenv'],
 
     modules: [
-        'nuxt-fontawesome'
+        'nuxt-fontawesome',
+        '@nuxtjs/axios'
+    ],
+    plugins: [
+        '~/plugins/axios-accessor.ts'
     ],
     fontawesome: {
         imports: [
@@ -18,6 +22,7 @@ export default {
             }
         ]
     },
+    axios: {},
     watchers: {
         webpack: {
             poll: true

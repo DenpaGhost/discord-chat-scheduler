@@ -7,6 +7,7 @@ namespace App\Actions\Auth;
 use App\Functions\Auth\AppAuthFunction;
 use App\Functions\Auth\AuthUtility;
 use App\Functions\Auth\DiscordAuthFunction;
+use App\Functions\Auth\TokenFunction;
 use App\Functions\UserFunction;
 use App\Models\Discord\CurrentUser;
 use Carbon\Carbon;
@@ -22,6 +23,7 @@ class AuthorizeAction
     private DiscordAuthFunction $discord_auth;
     private UserFunction $user_func;
     private AuthUtility $auth_util;
+    private TokenFunction $token_func;
 
     /**
      * AuthorizeAction constructor.
@@ -29,17 +31,20 @@ class AuthorizeAction
      * @param DiscordAuthFunction $discord_auth
      * @param UserFunction $user_func
      * @param AuthUtility $auth_util
+     * @param TokenFunction $token_func
      */
     public function __construct(
         AppAuthFunction $app_auth,
         DiscordAuthFunction $discord_auth,
         UserFunction $user_func,
-        AuthUtility $auth_util)
+        AuthUtility $auth_util,
+        TokenFunction $token_func)
     {
         $this->app_auth = $app_auth;
         $this->discord_auth = $discord_auth;
         $this->user_func = $user_func;
         $this->auth_util = $auth_util;
+        $this->token_func = $token_func;
     }
 
     /**
@@ -206,7 +211,7 @@ class AuthorizeAction
             return false;
         }
 
-        $this->token_func->removeTokenByAccessToken($token);
+        $this->app_auth->removeTokenByAccessToken($token);
         return true;
     }
 }

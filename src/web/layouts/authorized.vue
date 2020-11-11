@@ -4,8 +4,8 @@
 
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
-import {credential} from "~/utils/store-accessor";
-import AuthAction from "~/resources/actions/AuthAction";
+import {credential} from "~/store";
+import TokenUtility from "~/resources/utilities/TokenUtility";
 
 @Component
 export default class Authorized extends Vue {
@@ -14,15 +14,25 @@ export default class Authorized extends Vue {
       const expiresInTime = localStorage.getItem('expires_in_time');
       const refreshToken = localStorage.getItem('refresh_token');
 
-      if (!AuthAction.isPossibleRefreshingToken(expiresInTime, refreshToken)) {
-        await this.$router.replace('/');
+      if (expiresInTime == null || refreshToken == null) {
+        await this.$router.replace('/login/auth');
         return;
       }
 
-      const token = await AuthAction.refreshToken(refreshToken as string);
+      credential.setRefreshToken(refreshToken);
+      credential.setExpiresIn(TokenUtility.convertTimeToDate(parseInt(expiresInTime)));
 
-      localStorage.setItem('expires_in_time', token.expiresIn.getTime().toString());
-      localStorage.setItem('refresh_token', token.refreshToken);
+      try {
+        await credential.refresh(refreshToken);
+
+        if (credential.refreshToken != null && credential.expiresIn != null) {
+          localStorage.setItem('refresh_token', credential.refreshToken);
+          localStorage.setItem('expires_in_time', credential.expiresIn.getTime().toString());
+        }
+      } catch (e) {
+        // await this.$router.replace('/login/auth');
+        console.error(e);
+      }
     }
   }
 }

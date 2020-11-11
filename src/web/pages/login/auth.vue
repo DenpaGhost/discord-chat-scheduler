@@ -4,13 +4,15 @@
 
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
-import AuthAction from "~/resources/actions/AuthAction";
 import Utility from "~/resources/utilities/Utility";
+import AuthCode from "~/resources/auth/AuthCode";
 
 @Component
 export default class auth extends Vue {
   async mounted() {
-    const {state, verifier, challenge} = await AuthAction.makeCredentials();
+    const state = AuthCode.makeState();
+    const verifier = AuthCode.makeCodeVerifier();
+    const challenge = await AuthCode.makeCodeChallenge(verifier);
 
     localStorage.setItem('state', state);
     localStorage.setItem('verifier', verifier);

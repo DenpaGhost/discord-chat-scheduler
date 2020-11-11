@@ -6,8 +6,8 @@ export default {
     convertTimeToDate(time: number) {
         return new Date(time);
     },
-    isExpire(expiresIn: Date): boolean {
+    isExpire(expiresIn: Date | null): boolean {
         const now = new Date();
-        return now.getTime() > expiresIn.getTime();
+        return expiresIn == null || now.getTime() > expiresIn.getTime();
     }
 }
