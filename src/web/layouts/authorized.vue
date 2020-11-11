@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
-import {credential} from "~/store";
+import {credential, guardApi} from "~/store";
 import TokenUtility from "~/resources/utilities/TokenUtility";
 
 @Component
@@ -30,10 +30,11 @@ export default class Authorized extends Vue {
           localStorage.setItem('expires_in_time', credential.expiresIn.getTime().toString());
         }
       } catch (e) {
-        // await this.$router.replace('/login/auth');
-        console.error(e);
+        await this.$router.replace('/login/auth');
       }
     }
+
+    console.log(await guardApi.client.get('/user/@me'));
   }
 }
 </script>

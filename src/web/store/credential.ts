@@ -64,8 +64,6 @@ export default class Credential extends VuexModule implements iCredential {
             refresh_token: refreshToken
         });
 
-        console.log(token);
-
         this.setAccessToken(token.access_token)
         this.setRefreshToken(token.refresh_token);
         this.setExpiresIn(TokenUtility.convertExpiresInDate(token.expires_in));
