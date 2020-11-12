@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Guilds;
 
 use App\Actions\Guilds\GuildAction;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class GuildController extends Controller
@@ -22,14 +23,12 @@ class GuildController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
         $user_id = Auth::id();
-        return response()->json(
-            $this->guild_action->fetchAvailableGuilds($user_id)
-        );
+        return $this->guild_action->fetchAvailableGuilds($user_id);
     }
 
     /**

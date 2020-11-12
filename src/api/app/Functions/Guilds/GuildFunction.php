@@ -5,11 +5,17 @@ namespace App\Functions\Guilds;
 
 
 use App\Models\Discord\BotUser;
+use Illuminate\Support\Collection;
 
 class GuildFunction
 {
+    /**
+     * @return Collection
+     */
     public function fetchBotUserGuilds()
     {
-        (new BotUser(env('DISCORD_BOT_TOKEN')))->getGuilds();
+        return collect(
+            (new BotUser(env('DISCORD_BOT_TOKEN')))->getGuilds()
+        );
     }
 }

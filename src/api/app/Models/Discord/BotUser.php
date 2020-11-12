@@ -20,7 +20,6 @@ class BotUser
 
     public function getGuilds()
     {
-        $response = $this->http_client->get('/users/@me/guilds');
-        dd(collect($response));
+        return $this->http_client->get('/users/@me/guilds')->json();
     }
 }
