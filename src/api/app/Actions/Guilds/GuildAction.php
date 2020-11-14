@@ -48,11 +48,7 @@ class GuildAction
         $user_guilds = collect($current_user->getGuilds()->json());
         $bot_guilds = $this->guild_func->fetchBotUserGuilds();
 
-
-        return response()->json([
-            'user_guilds' => $user_guilds,
-            'bot_guilds' => $bot_guilds
-        ]);
+        return response()->json($this->guild_func->filterAvailableGuilds($bot_guilds, $user_guilds));
     }
 
     protected function getCurrentUser(DiscordToken $discord_token)
