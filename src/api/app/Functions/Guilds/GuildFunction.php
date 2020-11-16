@@ -15,7 +15,7 @@ class GuildFunction
     public function fetchBotUserGuilds()
     {
         return collect(
-            (new BotUser(env('DISCORD_BOT_TOKEN')))->getGuilds()
+            $this->getBotUser()->getGuilds()
         );
     }
 
@@ -27,17 +27,8 @@ class GuildFunction
      */
     public function filterAvailableGuilds(Collection $bot_guilds, Collection $user_guilds)
     {
-        $user_guilds_map = $user_guilds->mapWithKeys(function ($it) {
-            return [$it['id'] => [
-                'id' => $it['id'],
-                'icon' => $this->formattingGuildIconURL($it['id'], $it['icon']),
-                'name' => $it['name'],
-            ]];
-        });
-
-        $bot_guilds_map = $bot_guilds->map(function ($it) {
-            return $it['id'];
-        });
+        $user_guilds_map = $this->transformGuildsForMap($user_guilds);
+        $bot_guilds_map = $this->transformGuildsForIdArray($bot_guilds);
 
         return $user_guilds_map->filter(function ($value, $key) use ($bot_guilds_map) {
             return $bot_guilds_map->contains($key);
@@ -65,5 +56,80 @@ class GuildFunction
     public function formattingImageURL(string $path)
     {
         return "https://cdn.discordapp.com/$path";
+    }
+
+    /**
+     * 取得したデータの変換
+     * @param Collection $guilds
+     * @return Collection
+     */
+    public function transformGuildsForMap(Collection $guilds): Collection
+    {
+        return $guilds->mapWithKeys(function ($it) {
+            return [$it['id'] => [
+                'id' => $it['id'],
+                'icon' => $this->formattingGuildIconURL($it['id'], $it['icon']),
+                'name' => $it['name'],
+            ]];
+        });
+    }
+
+    /**
+     * GuildレスポンスコレクションをGuild IDのみの配列に変換
+     *
+     * @param Collection $guilds
+     * @return Collection|int[]
+     */
+    public function transformGuildsForIdArray(Collection $guilds): Collection
+    {
+        return $guilds->map(function ($it) {
+            return $it['id'];
+        });
+    }
+
+    /**
+     * ユーザが表示可能なギルドであるかどうか確認
+     * @param int $guild_id
+     * @param Collection $user_guilds
+     * @param Collection $bot_guilds
+     * @return bool
+     */
+    public function hasGuild(int $guild_id, Collection $user_guilds, Collection $bot_guilds): bool
+    {
+        $user_guilds_ids = $this->transformGuildsForIdArray($user_guilds);
+        $bot_guilds_ids = $this->transformGuildsForIdArray($bot_guilds);
+
+        return $user_guilds_ids->contains($guild_id) && $bot_guilds_ids->contains($guild_id);
+    }
+
+    /**
+     * サーバの取得
+     * @param int $guild_id
+     * @return array|mixed
+     */
+    public function getGuild(int $guild_id)
+    {
+        return $this->getBotUser()->getGuild($guild_id);
+    }
+
+    /**
+     * サーバーのテキストチャンネルを取得
+     * @param int $guild_id
+     * @return array|mixed
+     */
+    public function getGuildTextChannel(int $guild_id)
+    {
+        $channels = collect($this->getBotUser()->getGuildChannels($guild_id));
+
+        return $channels->filter(function ($it) {
+            return $it['type'] === 0;
+        })->sortBy(function ($it) {
+            return $it['position'];
+        });
+    }
+
+    protected function getBotUser()
+    {
+        return new BotUser(env('DISCORD_BOT_TOKEN'));
     }
 }

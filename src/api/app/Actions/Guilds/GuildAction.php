@@ -11,6 +11,7 @@ use App\Functions\UserFunction;
 use App\Models\Auth\DiscordToken;
 use App\Models\Discord\CurrentUser;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 
 class GuildAction
 {
@@ -34,6 +35,12 @@ class GuildAction
         $this->auth_util = $auth_util;
     }
 
+    /**
+     * 利用可能なギルドの表示
+     *
+     * @param int $user_id
+     * @return JsonResponse
+     */
     public function fetchAvailableGuilds(int $user_id)
     {
         $discord_token = $this->user_func->getDiscordToken($user_id);
@@ -42,13 +49,50 @@ class GuildAction
             throw new ModelNotFoundException();
         }
 
-        $current_user = new CurrentUser(
-            $discord_token, $this->discord_auth, $this->auth_util);
+        $current_user = $this->getCurrentUser($discord_token);
 
         $user_guilds = collect($current_user->getGuilds()->json());
         $bot_guilds = $this->guild_func->fetchBotUserGuilds();
 
         return response()->json($this->guild_func->filterAvailableGuilds($bot_guilds, $user_guilds));
+    }
+
+    /**
+     * @param int $guild_id
+     * @return JsonResponse
+     */
+    public function getGuild(int $guild_id)
+    {
+        $guild = $this->guild_func->getGuild($guild_id);
+        $channels = $this->guild_func->getGuildTextChannel($guild_id);
+
+        return response()->json([
+            'guild' => $guild,
+            'channels' => $channels
+        ]);
+    }
+
+    /**
+     * 表示可能なギルドかチェック
+     *
+     * @param int $user_id
+     * @param int $guild_id
+     * @return bool
+     */
+    public function isAvailableGuild(int $user_id, int $guild_id): bool
+    {
+        $discord_token = $this->user_func->getDiscordToken($user_id);
+
+        if ($discord_token === null) {
+            throw new ModelNotFoundException();
+        }
+
+        $current_user = $this->getCurrentUser($discord_token);
+
+        $user_guilds = collect($current_user->getGuilds()->json());
+        $bot_guilds = $this->guild_func->fetchBotUserGuilds();
+
+        return $this->guild_func->hasGuild($guild_id, $user_guilds, $bot_guilds);
     }
 
     protected function getCurrentUser(DiscordToken $discord_token)

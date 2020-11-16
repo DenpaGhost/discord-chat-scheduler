@@ -37,10 +37,10 @@ class GuildController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(int $id)
     {
-        //
+        return $this->guild_action->getGuild($id);
     }
 }

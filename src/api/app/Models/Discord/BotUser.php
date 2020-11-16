@@ -18,8 +18,49 @@ class BotUser
         ]);
     }
 
+    /**
+     * Botの所属するギルドの取得
+     * @return array|mixed
+     */
     public function getGuilds()
     {
         return $this->http_client->get('/users/@me/guilds')->json();
+    }
+
+    /**
+     * ギルド情報の取得
+     * @param int $guild_id
+     * @return array|mixed
+     */
+    public function getGuild(int $guild_id)
+    {
+        return $this->fetchJson("/users/@me/guilds/$guild_id");
+    }
+
+    /**
+     * チャンネルの取得
+     * @param int $guild_id
+     * @return array|mixed
+     *
+     * @see https://discord.com/developers/docs/resources/guild#create-guild-channel
+     */
+    public function getGuildChannels(int $guild_id)
+    {
+        return $this->fetchJson("/guilds/{$guild_id}/channels");
+    }
+
+    /**
+     * ロールの取得
+     * @param int $guild_id
+     * @return array|mixed
+     */
+    public function getGuildRoles(int $guild_id)
+    {
+        return $this->fetchJson("/guilds/{$guild_id}/roles");
+    }
+
+    protected function fetchJson(string $path)
+    {
+        return $this->http_client->get($path)->json();
     }
 }
