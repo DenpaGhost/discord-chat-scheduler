@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
-import {credential, guardApi} from "~/store";
+import {credential} from "~/store";
 import TokenUtility from "~/resources/utilities/TokenUtility";
 
 @Component
