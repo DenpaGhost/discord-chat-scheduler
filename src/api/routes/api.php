@@ -24,5 +24,6 @@ Route::get('/user/@me', function () {
 })->middleware('authentication');
 
 Route::resource('/user/guilds', GuildController::class)
-    ->only('index')
+    ->only(['index', 'show'])
+    ->parameter('guilds', 'guild_id')
     ->middleware('authentication');

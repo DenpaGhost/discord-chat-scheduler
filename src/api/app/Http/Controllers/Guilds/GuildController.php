@@ -18,6 +18,8 @@ class GuildController extends Controller
     public function __construct(GuildAction $guild_action)
     {
         $this->guild_action = $guild_action;
+
+        $this->middleware('available-guild')->only(['show']);
     }
 
     /**
