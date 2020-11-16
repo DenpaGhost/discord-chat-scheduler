@@ -34,7 +34,7 @@ class BotUser
      */
     public function getGuild(int $guild_id)
     {
-        return $this->fetchJson("/users/@me/guilds/$guild_id");
+        return $this->fetchJson("/guilds/$guild_id");
     }
 
     /**
@@ -59,6 +59,21 @@ class BotUser
         return $this->fetchJson("/guilds/{$guild_id}/roles");
     }
 
+    /**
+     * 絵文字の取得
+     * @param int $guild_id
+     * @return array|mixed
+     */
+    public function getGuildEmojis(int $guild_id)
+    {
+        return $this->fetchJson("/guilds/{$guild_id}/emojis");
+    }
+
+    /**
+     * リソースを取得してJSONデコード
+     * @param string $path
+     * @return array|mixed
+     */
     protected function fetchJson(string $path)
     {
         return $this->http_client->get($path)->json();

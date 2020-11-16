@@ -43,8 +43,6 @@ export default class Authorized extends Vue {
     }
 
     this.isRefreshing = false;
-
-    console.log(await guardApi.client.get('/user/guilds'));
   }
 }
 </script>

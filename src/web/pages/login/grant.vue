@@ -33,7 +33,7 @@ export default class grant extends Vue {
     credential.setRefreshToken(token.refresh_token);
     credential.setExpiresIn(expiresIn);
 
-    await this.$router.replace('/dashboard');
+    await this.$router.replace('/servers');
   }
 
   storeToken(verifier: string, code: string) {

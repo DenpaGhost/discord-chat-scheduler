@@ -128,6 +128,26 @@ class GuildFunction
         });
     }
 
+    /**
+     * サーバーの持つロールの取得
+     * @param int $guild_id
+     * @return Collection
+     */
+    public function getGuildRoles(int $guild_id)
+    {
+        return collect($this->getBotUser()->getguildRoles($guild_id));
+    }
+
+    /**
+     * サーバーの持つカスタム絵文字の取得
+     * @param int $guild_id
+     * @return Collection
+     */
+    public function getGuildEmojis(int $guild_id)
+    {
+        return collect($this->getBotUser()->getGuildEmojis($guild_id));
+    }
+
     protected function getBotUser()
     {
         return new BotUser(env('DISCORD_BOT_TOKEN'));
