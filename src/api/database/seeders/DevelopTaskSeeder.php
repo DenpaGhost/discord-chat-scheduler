@@ -15,11 +15,15 @@ class DevelopTaskSeeder extends Seeder
      */
     public function run()
     {
+        $date = new Carbon('2020-11-20');
         Task::create([
             'guild_id' => 660105903810281511,
             'channel_id' => 725707945387491384,
             'message' => 'テスト',
-            'executes_in' => new Carbon('2020-11-20')
+            'executes_in' => $date,
+            'executes_day_of_week' => $date->dayOfWeek,
+            'executes_week_of_month_number' => $date->weekOfMonth,
+            'is_end_of_month' => $date->isLastOfMonth()
         ]);
     }
 }
