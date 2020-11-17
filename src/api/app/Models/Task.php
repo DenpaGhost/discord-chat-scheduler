@@ -31,7 +31,18 @@ class Task extends Model
         'channel_id',
         'message',
         'executes_in',
-        'repeat'
+        'repeat',
+        'executes_day_of_week',
+        'executes_week_of_month_number',
+        'is_end_of_month'
+    ];
+
+    protected $hidden = [
+        'executes_day_of_week',
+        'executes_week_of_month_number',
+        'is_end_of_month',
+        'created_at',
+        'updated_at'
     ];
 
     /**

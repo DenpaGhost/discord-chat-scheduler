@@ -15,8 +15,8 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->unsignedBigInteger('guild_id');
-            $table->unsignedBigInteger('channel_id');
+            $table->string('guild_id');
+            $table->string('channel_id');
             $table->string('message');
             $table->dateTime('executes_in');
             $table->unsignedInteger('executes_day_of_week');

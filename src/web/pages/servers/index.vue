@@ -12,6 +12,11 @@
       <input id="path" type="text" v-model="path"/>
       <button type="submit">APIをたたく</button>
     </form>
+    <div>
+      <button type="button" @click="createTask">
+        タスク試作
+      </button>
+    </div>
     <ul>
       <li v-for="server in servers">
         {{ server.name }}: {{ server.id }}
@@ -53,6 +58,12 @@ export default class Index extends Vue {
     if (this.path.length <= 0) return;
 
     const {data} = await guardApi.client.get(this.path);
+    console.log(data);
+  }
+
+  async createTask() {
+    const {data} = await guardApi.client.delete(
+        '/servers/660105903810281511/tasks/42fcf1c7-7af2-4043-add2-8766f492d991');
     console.log(data);
   }
 }

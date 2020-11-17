@@ -7,6 +7,7 @@ namespace App\Actions\Guilds;
 use App\Functions\Auth\AuthUtility;
 use App\Functions\Auth\DiscordAuthFunction;
 use App\Functions\Guilds\GuildFunction;
+use App\Functions\Tasks\TaskFunction;
 use App\Functions\UserFunction;
 use App\Models\Auth\DiscordToken;
 use App\Models\Discord\CurrentUser;
@@ -19,6 +20,7 @@ class GuildAction
     private GuildFunction $guild_func;
     private DiscordAuthFunction $discord_auth;
     private AuthUtility $auth_util;
+    private TaskFunction $task_func;
 
     /**
      * GuildAction constructor.
@@ -26,13 +28,15 @@ class GuildAction
      * @param GuildFunction $guild_func
      * @param DiscordAuthFunction $discord_auth
      * @param AuthUtility $auth_util
+     * @param TaskFunction $task_func
      */
-    public function __construct(UserFunction $user_func, GuildFunction $guild_func, DiscordAuthFunction $discord_auth, AuthUtility $auth_util)
+    public function __construct(UserFunction $user_func, GuildFunction $guild_func, DiscordAuthFunction $discord_auth, AuthUtility $auth_util, TaskFunction $task_func)
     {
         $this->user_func = $user_func;
         $this->guild_func = $guild_func;
         $this->discord_auth = $discord_auth;
         $this->auth_util = $auth_util;
+        $this->task_func = $task_func;
     }
 
     /**
@@ -65,10 +69,12 @@ class GuildAction
     {
         $guild = $this->guild_func->getGuild($guild_id);
         $channels = $this->guild_func->getGuildTextChannel($guild_id);
+        $tasks = $this->task_func->getTasksByGuildId($guild_id);
 
         return response()->json([
             'guild' => $guild,
-            'channels' => $channels
+            'channels' => $channels,
+            'tasks' => $tasks
         ]);
     }
 
