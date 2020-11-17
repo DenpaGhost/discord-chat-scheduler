@@ -123,9 +123,7 @@ class GuildFunction
 
         return $channels->filter(function ($it) {
             return $it['type'] === 0;
-        })->sortBy(function ($it) {
-            return $it['position'];
-        });
+        })->sortBy('position')->values();
     }
 
     /**
