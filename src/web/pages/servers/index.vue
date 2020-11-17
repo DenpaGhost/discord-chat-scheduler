@@ -1,3 +1,4 @@
+!
 <template>
   <div>
     <h1>サーバー一覧</h1>
@@ -6,9 +7,14 @@
         ログアウト
       </button>
     </p>
+    <form @submit.prevent="getApi">
+      <label for="path">path</label>
+      <input id="path" type="text" v-model="path"/>
+      <button type="submit">APIをたたく</button>
+    </form>
     <ul>
       <li v-for="server in servers">
-        {{ server.name }}
+        {{ server.name }}: {{ server.id }}
       </li>
     </ul>
   </div>
@@ -23,6 +29,7 @@ import {credential, guardApi} from "~/store";
 })
 export default class Index extends Vue {
   servers: Array<any> = [];
+  path: string = '';
 
   async mounted() {
     await this.fetchServers();
@@ -39,7 +46,14 @@ export default class Index extends Vue {
     const {data: servers} = await guardApi.client.get('/servers');
     this.servers = servers;
 
-    console.log((await guardApi.client.get(`/servers/${servers[0].id}`)).data);
+    // console.log((await guardApi.client.get(`/servers/${servers[0].id}`)).data);
+  }
+
+  async getApi() {
+    if (this.path.length <= 0) return;
+
+    const {data} = await guardApi.client.get(this.path);
+    console.log(data);
   }
 }
 </script>
