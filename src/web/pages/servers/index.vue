@@ -37,7 +37,7 @@ export default class Index extends Vue {
   path: string = '';
 
   async mounted() {
-    await this.fetchServers();
+    // await this.fetchServers();
   }
 
   async logout() {
@@ -50,8 +50,6 @@ export default class Index extends Vue {
   async fetchServers() {
     const {data: servers} = await guardApi.client.get('/servers');
     this.servers = servers;
-
-    // console.log((await guardApi.client.get(`/servers/${servers[0].id}`)).data);
   }
 
   async getApi() {
@@ -62,8 +60,14 @@ export default class Index extends Vue {
   }
 
   async createTask() {
-    const {data} = await guardApi.client.delete(
-        '/servers/660105903810281511/tasks/42fcf1c7-7af2-4043-add2-8766f492d991');
+    const {data} = await guardApi.client.post(
+        '/servers/660105903810281511/tasks',
+        {
+          'channel_id': '725707945387491384',
+          'message': 'フロントから試しに更新',
+          'executes_in': '2020-11-20 10:10:00',
+          'repeat': 'weekly'
+        });
     console.log(data);
   }
 }

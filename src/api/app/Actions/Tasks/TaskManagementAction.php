@@ -7,7 +7,10 @@ namespace App\Actions\Tasks;
 use App\Functions\Tasks\TaskFunction;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class TaskManagementAction
 {
@@ -48,11 +51,15 @@ class TaskManagementAction
     /**
      * @param string $guild_id
      * @param array $forms
-     * @return JsonResponse
+     * @return Application|ResponseFactory|JsonResponse|Response
      * @throws Exception
      */
     public function storeTask(string $guild_id, array $forms)
     {
+        if (!$this->task_func->isValidRepeatString($forms['repeat'])) {
+            return response('repeat is unprocessable', 422);
+        }
+
         return response()->json(
             $this->task_func->storeTask(
                 $guild_id,
@@ -67,11 +74,15 @@ class TaskManagementAction
     /**
      * @param string $task_id
      * @param array $forms
-     * @return JsonResponse
+     * @return Application|ResponseFactory|JsonResponse|Response
      * @throws Exception
      */
     public function updateTask(string $task_id, array $forms)
     {
+        if (!$this->task_func->isValidRepeatString($forms['repeat'])) {
+            return response('repeat is unprocessable', 422);
+        }
+
         return response()->json(
             $this->task_func->updateTask(
                 $task_id,
@@ -85,12 +96,14 @@ class TaskManagementAction
 
     /**
      * @param string $task_id
-     * @return JsonResponse
+     * @return Application|ResponseFactory|JsonResponse|Response
      */
     public function deleteTask(string $task_id)
     {
-        $this->task_func->deleteTask($task_id);
-
-        return response()->json(null, 200);
+        if ($this->task_func->deleteTask($task_id)) {
+            return response(null, 200);
+        } else {
+            return response(null, 404);
+        }
     }
 }

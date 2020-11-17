@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Tasks;
 
 use App\Actions\Tasks\TaskManagementAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tasks\TaskEditRequest;
+use App\Http\Requests\Tasks\TaskStoreRequest;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TaskManagementController extends Controller
 {
@@ -35,12 +40,12 @@ class TaskManagementController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param TaskStoreRequest $request
      * @param string $guild_id
      * @return JsonResponse
      * @throws Exception
      */
-    public function store(Request $request, string $guild_id)
+    public function store(TaskStoreRequest $request, string $guild_id)
     {
         return $this->action->storeTask($guild_id, $request->all());
     }
@@ -51,6 +56,7 @@ class TaskManagementController extends Controller
      * @param string $guild_id ミドルウェアのために存在
      * @param string $id
      * @return JsonResponse
+     * @throws ModelNotFoundException
      */
     public function show(string $guild_id, string $id)
     {
@@ -60,13 +66,13 @@ class TaskManagementController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param TaskEditRequest $request
      * @param string $guild_id
      * @param string $id
      * @return JsonResponse
      * @throws Exception
      */
-    public function update(Request $request, string $guild_id, string $id)
+    public function update(TaskEditRequest $request, string $guild_id, string $id)
     {
         return $this->action->updateTask($id, $request->all());
     }
@@ -76,10 +82,10 @@ class TaskManagementController extends Controller
      *
      * @param string $guild_id
      * @param string $id
-     * @return void
+     * @return Application|ResponseFactory|JsonResponse|Response|void
      */
     public function destroy(string $guild_id, string $id)
     {
-        $this->action->deleteTask($id);
+        return $this->action->deleteTask($id);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Functions\Tasks;
 
 
 use App\Models\Task;
+use App\Models\Tasks\TaskRepeat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
@@ -95,11 +96,30 @@ class TaskFunction
     /**
      * タスクの削除
      * @param string $task_uid
+     * @return bool
      */
     public function deleteTask(
         string $task_uid
     )
     {
-        Task::destroy($task_uid);
+        return Task::destroy($task_uid) > 0;
+    }
+
+    /**
+     * @param string|null $repeat
+     * @return bool
+     */
+    public function isValidRepeatString(?string $repeat)
+    {
+        $repeats = collect([
+            TaskRepeat::$DAILY,
+            TaskRepeat::$WEEKLY,
+            TaskRepeat::$DATE_PER_MONTH,
+            TaskRepeat::$END_OF_MONTH,
+            TaskRepeat::$DAY_OF_WEEK_PER_MONTH,
+            TaskRepeat::$YEARLY
+        ]);
+
+        return empty($repeat) || $repeats->contains($repeat);
     }
 }
