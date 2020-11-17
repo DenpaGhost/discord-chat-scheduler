@@ -29,7 +29,7 @@ class Authentication
     public function handle(Request $request, Closure $next)
     {
         if (!$this->action->authentication($request->header('Authorization'))) {
-            return response()->json([], 401);
+            return response('Unauthorized', 401);
         }
         return $next($request);
     }

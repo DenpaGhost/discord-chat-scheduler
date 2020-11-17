@@ -33,7 +33,7 @@ class AvailableGuild
         $guild_id = $request->route()->parameter('guild_id');
 
         if (!$this->action->isAvailableGuild(Auth::id(), $guild_id)) {
-            return response()->json([], 404);
+            return response('Not Found', 404);
         }
 
         return $next($request);
