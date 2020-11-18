@@ -6,7 +6,9 @@ export default {
         NODE_ENV
     },
     buildModules: ['@nuxt/typescript-build', '@nuxtjs/dotenv'],
-
+    css:[
+      '@/assets/styles/main.scss'
+    ],
     modules: [
         'nuxt-fontawesome',
         '@nuxtjs/axios'

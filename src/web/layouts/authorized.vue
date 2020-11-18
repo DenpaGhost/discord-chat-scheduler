@@ -1,6 +1,11 @@
 <template>
-  <div v-if="!isRefreshing">
-    <nuxt/>
+  <div v-if="!isRefreshing" class="view-container">
+    <div class="sidenavi-container">
+
+    </div>
+    <div class="mainarea-container">
+      <nuxt/>
+    </div>
   </div>
   <div v-else>
     トークン更新中...
@@ -47,6 +52,6 @@ export default class Authorized extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 
 </style>
