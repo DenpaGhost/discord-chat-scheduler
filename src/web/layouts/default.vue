@@ -1,7 +1,7 @@
 <template>
   <div class="view-container">
     <div class="sidenavi-container">
-
+      <guild-list/>
     </div>
     <div class="mainarea-container">
       <nuxt/>
@@ -11,8 +11,11 @@
 
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
+import GuildList from "~/components/guilds/GuildList.vue";
 
-@Component
+@Component({
+  components: {GuildList}
+})
 export default class Default extends Vue {
   head() {
     return {
@@ -24,6 +27,6 @@ export default class Default extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 
 </style>
