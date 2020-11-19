@@ -9,8 +9,8 @@ import {Component, Prop, Vue} from "nuxt-property-decorator";
 
 @Component
 export default class GuildListItem extends Vue {
-  @Prop({type: Boolean, required: true})
-  isOpening: boolean;
+  @Prop({type: Boolean, required: true, default: false})
+  isOpening!: boolean;
 }
 </script>
 
@@ -46,40 +46,29 @@ $icon-width: 3.5em;
   }
 
   &:hover:after {
-    position: absolute;
-    display: block;
-    content: '';
-    left: 0;
-    top: 0.25em;
-    bottom: 0.25em;
-    width: 5px;
-    border-radius: 0 2.5px 2.5px 0;
-    background-color: #060606;
+    top: 1em;
+    bottom: 1em;
   }
 
   &:hover > .guild-icon {
-    border-radius: 0.25em;
-  }
-
-  &:hover > .guild-icon::after {
-
+    border-radius: 1em;
   }
 }
 
-.opening:after {
-  position: absolute;
-  display: block;
-  content: '';
-  left: 0;
-  top: 1em;
-  bottom: 1em;
-  width: 5px;
-  border-radius: 0 2.5px 2.5px 0;
-  background-color: #060606;
+.opening {
+  &:after {
+    top: 0.25em !important;
+    bottom: 0.25em !important;
+  }
+
+  & > .guild-icon {
+    border-radius: 1em !important;
+  }
 }
 
 .guild-icon {
   width: $icon-width;
   height: $icon-height;
 }
+
 </style>

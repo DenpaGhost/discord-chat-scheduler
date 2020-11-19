@@ -10,7 +10,8 @@ body {
   width: 5em;
   height: 100vh;
   flex-grow: 0;
-  overflow: scroll;
+  z-index: 1;
+  overflow: visible;
 }
 
 .mainarea-container {
