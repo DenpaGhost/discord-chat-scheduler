@@ -1,7 +1,7 @@
 <template>
-  <a class="guild-list-item" href="#" :class="{'opening': isOpening}">
+  <nuxt-link class="guild-list-item" :class="{'opening': isOpening}" :to="`/servers/${serverId}`">
     <img src="/samples/images/icon.jpg" alt="サーバーアイコン" class="guild-icon"/>
-  </a>
+  </nuxt-link>
 </template>
 
 <script lang="ts">
@@ -11,6 +11,9 @@ import {Component, Prop, Vue} from "nuxt-property-decorator";
 export default class GuildListItem extends Vue {
   @Prop({type: Boolean, required: true, default: false})
   isOpening!: boolean;
+
+  @Prop({type: String, required: true})
+  serverId!: string;
 }
 </script>
 
@@ -22,7 +25,7 @@ $icon-width: 3.5em;
   display: block;
   width: 100%;
   height: $icon-height;
-  padding: 0.25em 0;
+  margin: 0.25em 0;
   text-align: center;
   position: relative;
 

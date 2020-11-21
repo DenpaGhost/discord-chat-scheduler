@@ -7,17 +7,17 @@
       <div>
         {{ tooltip.content }}
       </div>
-      <div class="guild-list-tooltip-arrow-container">
+      <div class="guild-list-tooltip-arrow-container font-weight-bold">
         <div class="guild-list-tooltip-arrow"></div>
       </div>
     </div>
 
     <div class="guild-list-scroller">
-      <guild-list-item :is-opening="true"/>
       <guild-list-item v-for="it in array"
                        :key="it"
-                       :is-opening="false"
+                       :is-opening="opening === `test${it}`"
                        :ref="`test${it}`"
+                       :server-id="`test${it}`"
                        @mouseenter.native="showTooltip(`test${it}`)"
                        @mouseleave.native="hideTooltip"/>
     </div>
@@ -55,6 +55,10 @@ export default class GuildList extends Vue {
   hideTooltip() {
     this.tooltip.visibility = false;
   }
+
+  get opening() {
+    return this.$route.params?.serverId ?? null
+  }
 }
 </script>
 
@@ -84,7 +88,7 @@ export default class GuildList extends Vue {
     visibility: hidden;
     color: #ffffff;
     background-color: #060606;
-    padding: 0.25em;
+    padding: 0.5em 1em;
     z-index: 2;
     max-width: 200px;
     word-break: keep-all;

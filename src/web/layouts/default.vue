@@ -4,7 +4,7 @@
       <guild-list/>
     </div>
     <div class="mainarea-container">
-      <nuxt/>
+        <nuxt/>
     </div>
   </div>
 </template>

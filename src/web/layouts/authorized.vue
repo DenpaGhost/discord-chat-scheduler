@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isRefreshing" class="view-container">
     <div class="sidenavi-container">
-
+      <guild-list/>
     </div>
     <div class="mainarea-container">
       <nuxt/>
@@ -16,8 +16,10 @@
 import {Component, Vue} from "nuxt-property-decorator";
 import {credential} from "~/store";
 import TokenUtility from "~/resources/utilities/TokenUtility";
-
-@Component
+import GuildList from "~/components/guilds/GuildList.vue";
+@Component({
+  components: {GuildList}
+})
 export default class Authorized extends Vue {
   isRefreshing: boolean = true;
 
