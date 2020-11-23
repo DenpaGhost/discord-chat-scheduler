@@ -17,12 +17,7 @@ export default {
         '~/plugins/axios-accessor.ts'
     ],
     fontawesome: {
-        imports: [
-            {
-                set: '@fortawesome/free-solid-svg-icons',
-                icons: ['fas']
-            }
-        ]
+        component: 'fa'
     },
     axios: {},
     watchers: {

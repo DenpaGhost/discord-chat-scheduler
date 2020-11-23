@@ -93,7 +93,7 @@ export default class GuildList extends Vue {
     max-width: 200px;
     word-break: keep-all;
     border-radius: 0.25em;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
     transition: opacity 200ms ease-in-out, visibility 0ms 200ms;
 
     .guild-list-tooltip-arrow-container {

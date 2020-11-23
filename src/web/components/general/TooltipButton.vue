@@ -1,12 +1,10 @@
 <template>
   <div class="tooltip-button-container">
-    <button type="button"
-            class="button-link"
-            @mouseenter="onHover()"
-            @click="onClick()"
-            :ref="`${unique}button`">
+    <div class="tooltip-button"
+         @mouseenter="onHover()"
+         :ref="`${unique}button`">
       <slot name="label"/>
-    </button>
+    </div>
     <div class="button-tooltip-hider">
       <div class="button-tooltip-container"
            :style="tooltipStyle"
@@ -37,7 +35,7 @@ export default class TooltipButton extends Vue {
     const tooltipRect = this.tooltip.getBoundingClientRect();
 
     this.tooltipStyle.top = `${-1 * tooltipRect.height}px`;
-    this.tooltipStyle.left = `${Math.abs((buttonRect.width - tooltipRect.width) / 2)}px`;
+    this.tooltipStyle.left = `${(buttonRect.width - tooltipRect.width) / 2}px`;
   }
 
   onClick() {
@@ -73,10 +71,13 @@ export default class TooltipButton extends Vue {
     flex-direction: column;
     align-items: center;
 
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.6));
+
     .button-tooltip {
       padding: 0.5em;
       background-color: #060606;
       border-radius: 0.25em;
+      word-break: keep-all;
     }
 
     .button-tooltip-arrow {
@@ -96,7 +97,7 @@ export default class TooltipButton extends Vue {
   opacity: 0;
 }
 
-.button-link:hover + .button-tooltip-hider {
+.tooltip-button:hover + .button-tooltip-hider {
   transition: display 0ms, opacity 200ms linear !important;
   visibility: visible;
   opacity: 1;
