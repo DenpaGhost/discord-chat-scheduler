@@ -6,7 +6,7 @@
       <img v-if="icon" :src="icon" alt="サーバーアイコン" class="guild-icon-img"/>
       <div v-else>
         <span>
-          ああああああああああ
+          ゲーミングおかもと
         </span>
       </div>
     </div>
@@ -88,8 +88,8 @@ $icon-width: 3.5em;
     justify-content: center;
 
     overflow: hidden;
+    word-break: keep-all;
     white-space: nowrap;
-    text-overflow: ellipsis;
   }
 }
 
