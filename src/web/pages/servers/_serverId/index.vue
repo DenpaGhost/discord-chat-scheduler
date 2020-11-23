@@ -28,7 +28,7 @@
       <div>
         <tooltip-button right>
           <template v-slot:label>
-            <button type="button" class="button-link">
+            <button type="button" class="button-link" @click="editModalOpen = true">
               <fa :icon="icon.plus"/>
             </button>
           </template>
@@ -38,6 +38,8 @@
         </tooltip-button>
       </div>
     </div>
+
+    <task-edit-modal-dialog :is-open="editModalOpen" @close="editModalOpen = false"/>
 
     <div class="task-list-container">
       <task-card/>
@@ -56,13 +58,16 @@ import {Component, Prop, Vue} from "nuxt-property-decorator";
 import TaskCard from "~/components/guild-detail/TaskCard.vue";
 import {faCog, faPlus} from "@fortawesome/free-solid-svg-icons";
 import TooltipButton from "~/components/general/TooltipButton.vue";
+import TaskEditModalDialog from "~/components/tasks/TaskEditModalDialog.vue";
 
 @Component({
-  components: {TooltipButton, TaskCard}
+  components: {TaskEditModalDialog, TooltipButton, TaskCard}
 })
 export default class Index extends Vue {
   @Prop({type: String, default: 'サーバー名'})
   serverName!: string;
+
+  editModalOpen: boolean = false;
 
   get icon() {
     return {
