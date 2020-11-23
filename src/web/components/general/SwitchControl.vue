@@ -5,7 +5,9 @@
         <slot/>
       </span>
       <span class="switch-control">
-        <input type="checkbox" class="switch-control-checkbox">
+        <input type="checkbox"
+               class="switch-control-checkbox"
+               v-model="_value">
         <span class="switch-control-container">
           <span class="switch-control-handle-container">
             <span class="switch-control-handle"></span>
@@ -17,11 +19,21 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "nuxt-property-decorator";
+import {Component, Prop, Vue} from "nuxt-property-decorator";
 
 @Component
 export default class SwitchControl extends Vue {
 
+  @Prop()
+  value: any;
+
+  get _value() {
+    return this.value;
+  }
+
+  set _value(value) {
+    this.$emit('input', value);
+  }
 }
 </script>
 
@@ -31,7 +43,7 @@ export default class SwitchControl extends Vue {
 }
 
 .switch-control-checkbox + .switch-control-container {
-  background-color: #E3E5E9;
+  background-color: #72767D;
 
   .switch-control-handle {
     transform: translateX(-1rem);
@@ -39,7 +51,7 @@ export default class SwitchControl extends Vue {
 }
 
 .switch-control-checkbox:checked + .switch-control-container {
-  background-color: #4CAF50;
+  background-color: #43B581;
 
   .switch-control-handle {
     transform: translateX(1rem);
@@ -48,6 +60,7 @@ export default class SwitchControl extends Vue {
 
 .switch-control-label {
   display: block;
+  user-select: none;
 
   span {
     display: block;

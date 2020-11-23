@@ -19,9 +19,25 @@
       </div>
     </div>
 
-    <h3>
-      予約中のメッセージ
-    </h3>
+    <div class="task-add">
+      <div>
+        <h3>
+          予約中のメッセージ
+        </h3>
+      </div>
+      <div>
+        <tooltip-button right>
+          <template v-slot:label>
+            <button type="button" class="button-link">
+              <fa :icon="icon.plus"/>
+            </button>
+          </template>
+          <template v-slot:tooltip>
+            メッセージの予約を追加
+          </template>
+        </tooltip-button>
+      </div>
+    </div>
 
     <div class="task-list-container">
       <task-card/>
@@ -38,7 +54,7 @@
 <script lang="ts">
 import {Component, Prop, Vue} from "nuxt-property-decorator";
 import TaskCard from "~/components/guild-detail/TaskCard.vue";
-import {faCog} from "@fortawesome/free-solid-svg-icons";
+import {faCog, faPlus} from "@fortawesome/free-solid-svg-icons";
 import TooltipButton from "~/components/general/TooltipButton.vue";
 
 @Component({
@@ -50,7 +66,8 @@ export default class Index extends Vue {
 
   get icon() {
     return {
-      cog: faCog
+      cog: faCog,
+      plus: faPlus
     }
   }
 
@@ -73,6 +90,15 @@ export default class Index extends Vue {
 .task-list-container {
   & > div {
     margin-bottom: 1em;
+  }
+}
+
+.task-add {
+  display: flex;
+  align-items: center;
+
+  & > div:nth-child(2) {
+    margin-left: 0.5em;
   }
 }
 </style>

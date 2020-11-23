@@ -1,5 +1,15 @@
 <template>
-  <div>
+  <div class="role-setting-container">
+    <div class="role-setting-closer">
+      <nuxt-link class="role-setting-closer-container"
+                 replace
+                 :to="`/servers/${serverId}`">
+        <div class="role-setting-closer-icon">
+          <fa :icon="icon.batsu"/>
+        </div>
+      </nuxt-link>
+    </div>
+
     <div class="role-setting-header">
       <h4>サーバー名</h4>
       <h3 class="text-high">
@@ -7,7 +17,7 @@
       </h3>
     </div>
 
-    <switch-control>
+    <switch-control v-model="roleSettings.value">
       スイッチコントロール
     </switch-control>
   </div>
@@ -16,16 +26,33 @@
 <script lang="ts">
 import {Component, Vue} from "nuxt-property-decorator";
 import SwitchControl from "~/components/general/SwitchControl.vue";
+import {faTimes} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   components: {SwitchControl}
 })
 export default class Settings extends Vue {
+  roleSettings = {
+    value: true
+  }
 
+  get serverId() {
+    return this.$route.params['serverId'];
+  }
+
+  get icon() {
+    return {
+      batsu: faTimes
+    }
+  }
 }
 </script>
 
 <style lang="scss">
+.role-setting-container {
+  margin-right: 5em;
+}
+
 .role-setting-header {
   h4 {
     margin-bottom: 0;
@@ -33,6 +60,48 @@ export default class Settings extends Vue {
 
   h3 {
     margin-top: 0;
+  }
+}
+
+.role-setting-closer {
+  position: fixed;
+  top: 2em;
+  right: 2em;
+  z-index: 2;
+  text-align: center;
+  color: #E3E5E9;
+
+  .role-setting-closer-container {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .role-setting-closer-icon svg {
+    vertical-align: middle;
+  }
+}
+
+.light {
+  .role-setting-closer-container {
+    border: 2px solid #dcddde;
+  }
+
+  .role-setting-closer-container:link, .role-setting-closer-container:visited {
+    color: #4F5760;
+    transition: background-color 200ms, transform 200ms ease-in-out;
+  }
+
+  .role-setting-closer-container:hover {
+    background-color: rgba(#E3E5E9, 0.6);
+  }
+
+  .role-setting-closer-container:active {
+    transform: translateY(2px);
   }
 }
 </style>
