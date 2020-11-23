@@ -7,21 +7,20 @@
       <div class="server-control-container">
         <tooltip-button :right="true">
           <template v-slot:label>
-            <a class="button-link" href="#">
+            <nuxt-link :to="`/servers/${serverId}/settings`"
+                       class="button-link">
               <fa :icon="icon.cog"/>
-            </a>
+            </nuxt-link>
           </template>
           <template v-slot:tooltip>
             管理ロール設定
           </template>
         </tooltip-button>
-
-
       </div>
     </div>
 
     <h3>
-      Tasks
+      予約中のメッセージ
     </h3>
 
     <div class="task-list-container">
@@ -53,6 +52,10 @@ export default class Index extends Vue {
     return {
       cog: faCog
     }
+  }
+
+  get serverId() {
+    return this.$route.params['serverId'];
   }
 }
 </script>
