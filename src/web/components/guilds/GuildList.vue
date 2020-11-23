@@ -5,7 +5,9 @@
          :style="tooltip.style"
          ref="guild-list-tooltip">
       <div>
-        {{ tooltip.content }}
+        <b>
+          {{ tooltip.content }}
+        </b>
       </div>
       <div class="guild-list-tooltip-arrow-container font-weight-bold">
         <div class="guild-list-tooltip-arrow"></div>
