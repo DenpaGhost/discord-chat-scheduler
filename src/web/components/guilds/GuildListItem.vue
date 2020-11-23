@@ -1,6 +1,15 @@
 <template>
-  <nuxt-link class="guild-list-item" :class="{'opening': isOpening}" :to="`/servers/${serverId}`">
-    <img src="/samples/images/icon.jpg" alt="サーバーアイコン" class="guild-icon"/>
+  <nuxt-link class="guild-list-item"
+             :class="{'opening': isOpening}"
+             :to="`/servers/${serverId}`">
+    <div class="guild-icon">
+      <img v-if="icon" :src="icon" alt="サーバーアイコン" class="guild-icon-img"/>
+      <div v-else>
+        <span>
+          ああああああああああ
+        </span>
+      </div>
+    </div>
   </nuxt-link>
 </template>
 
@@ -14,6 +23,9 @@ export default class GuildListItem extends Vue {
 
   @Prop({type: String, required: true})
   serverId!: string;
+
+  @Prop({type: String})
+  icon!: string;
 }
 </script>
 
@@ -22,17 +34,15 @@ $icon-height: 3.5em;
 $icon-width: 3.5em;
 
 .guild-list-item {
-  display: block;
+  display: flex;
   width: 100%;
   height: $icon-height;
   margin: 0.25em 0;
-  text-align: center;
-  position: relative;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 
-  &:link > .guild-icon {
-    transition: border-radius 200ms ease-in-out;
-    border-radius: 2em;
-  }
+  position: relative;
 
   &:after {
     position: absolute;
@@ -52,10 +62,6 @@ $icon-width: 3.5em;
     top: 1em;
     bottom: 1em;
   }
-
-  &:hover > .guild-icon {
-    border-radius: 1em;
-  }
 }
 
 .opening {
@@ -72,6 +78,49 @@ $icon-width: 3.5em;
 .guild-icon {
   width: $icon-width;
   height: $icon-height;
+  overflow: hidden;
+
+  & > div {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.guild-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.light {
+  .guild-icon {
+    background-color: #ffffff;
+  }
+
+  .guild-list-item {
+    &:link, &:visited {
+      .guild-icon {
+        transition: border-radius 200ms ease-in-out, color 200ms, background-color 200ms;
+        color: #4F5760;
+        border-radius: 2em;
+      }
+    }
+
+    &:hover {
+      .guild-icon {
+        background-color: #7289DA;
+        color: #ffffff;
+        border-radius: 1em;
+      }
+    }
+  }
 }
 
 </style>

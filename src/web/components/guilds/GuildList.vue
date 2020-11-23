@@ -18,7 +18,16 @@
                        :is-opening="opening === `test${it}`"
                        :ref="`test${it}`"
                        :server-id="`test${it}`"
+                       icon="/samples/images/icon.jpg"
                        @mouseenter.native="showTooltip(`test${it}`)"
+                       @mouseleave.native="hideTooltip"/>
+
+      <guild-list-item v-for="it in array"
+                       :key="`${it}_2`"
+                       :is-opening="opening === `test${it}_2`"
+                       :ref="`test${it}_2`"
+                       :server-id="`test${it}_2`"
+                       @mouseenter.native="showTooltip(`test${it}_2`)"
                        @mouseleave.native="hideTooltip"/>
     </div>
   </div>
@@ -32,7 +41,7 @@ import GuildListItem from "~/components/guilds/GuildListItem.vue";
   components: {GuildListItem}
 })
 export default class GuildList extends Vue {
-  array: number[] = [...Array(20)].map((v, i) => i);
+  array: number[] = [...Array(5)].map((v, i) => i);
 
   tooltip = {
     visibility: false,
