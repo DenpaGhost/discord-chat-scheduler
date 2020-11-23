@@ -5,7 +5,8 @@
          :ref="`${unique}button`">
       <slot name="label"/>
     </div>
-    <div class="button-tooltip-hider">
+    <div class="button-tooltip-hider"
+         :class="this.tooltipDirectionClass">
       <div class="button-tooltip-container"
            :style="tooltipStyle"
            :ref="`${unique}tooltip`">
@@ -19,10 +20,16 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "nuxt-property-decorator";
+import {Component, Prop, Vue} from "nuxt-property-decorator";
 
 @Component
 export default class TooltipButton extends Vue {
+  @Prop({type: Boolean, default: true})
+  top!: boolean;
+
+  @Prop({type: Boolean, default: false})
+  right!: boolean;
+
   unique!: string;
   tooltipStyle = {top: '0', left: '0'}
 
@@ -31,11 +38,25 @@ export default class TooltipButton extends Vue {
   }
 
   onHover() {
+    if (this.right) {
+      this.setTooltipRight();
+    } else if (this.top) {
+      this.setTooltipTop();
+    }
+  }
+
+  setTooltipTop() {
     const buttonRect = this.button.getBoundingClientRect();
     const tooltipRect = this.tooltip.getBoundingClientRect();
-
     this.tooltipStyle.top = `${-1 * tooltipRect.height}px`;
     this.tooltipStyle.left = `${(buttonRect.width - tooltipRect.width) / 2}px`;
+  }
+
+  setTooltipRight() {
+    const buttonRect = this.button.getBoundingClientRect();
+    const tooltipRect = this.tooltip.getBoundingClientRect();
+    this.tooltipStyle.top = `${(buttonRect.height - tooltipRect.height) / 2}px`;
+    this.tooltipStyle.left = `${buttonRect.width}px`;
   }
 
   onClick() {
@@ -51,11 +72,18 @@ export default class TooltipButton extends Vue {
   }
 
   getUniqueStr(): string {
-    let strong = 1000;
+    let strong = 100000;
     return (
         new Date().getTime().toString(16) +
         Math.floor(strong * Math.random()).toString(16)
     );
+  }
+
+  get tooltipDirectionClass() {
+    return {
+      'top': !this.right ? this.top : false,
+      'right': this.right
+    }
   }
 }
 </script>
@@ -64,20 +92,9 @@ export default class TooltipButton extends Vue {
 .tooltip-button-container {
   position: relative;
 
-  .button-tooltip-container {
-    position: absolute;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.6));
-
-    .button-tooltip {
-      padding: 0.5em;
-      background-color: #060606;
-      border-radius: 0.25em;
-      word-break: keep-all;
+  .top {
+    .button-tooltip-container {
+      flex-direction: column;
     }
 
     .button-tooltip-arrow {
@@ -87,6 +104,37 @@ export default class TooltipButton extends Vue {
       border-right: solid 0.5em transparent;
       border-bottom: solid 0.5em transparent;
       border-left: solid 0.5em transparent;
+    }
+  }
+
+  .right {
+    .button-tooltip-container {
+      flex-direction: row-reverse;
+    }
+
+    .button-tooltip-arrow {
+      width: 0;
+      height: 0;
+      border-top: solid 0.5em transparent;
+      border-right: solid 0.5em #060606;
+      border-bottom: solid 0.5em transparent;
+      border-left: solid 0.5em transparent;
+    }
+  }
+
+  .button-tooltip-container {
+    position: absolute;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.6));
+
+    .button-tooltip {
+      padding: 0.5em;
+      background-color: #060606;
+      border-radius: 0.25em;
+      word-break: keep-all;
     }
   }
 }

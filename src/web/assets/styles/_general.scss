@@ -17,6 +17,9 @@ body {
 .mainarea-container {
   flex-grow: 1;
   padding: 1em 2em;
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
 }
 
 .button-link {

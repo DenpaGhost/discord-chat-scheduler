@@ -5,9 +5,18 @@
         <h3 class="text-high">{{ serverName }}</h3>
       </div>
       <div class="server-control-container">
-        <button class="button-link">
-          <fa :icon="icon.cog"/>
-        </button>
+        <tooltip-button :right="true">
+          <template v-slot:label>
+            <a class="button-link" href="#">
+              <fa :icon="icon.cog"/>
+            </a>
+          </template>
+          <template v-slot:tooltip>
+            管理ロール設定
+          </template>
+        </tooltip-button>
+
+
       </div>
     </div>
 
@@ -15,7 +24,13 @@
       Tasks
     </h3>
 
-    <div>
+    <div class="task-list-container">
+      <task-card/>
+      <task-card/>
+      <task-card/>
+      <task-card/>
+      <task-card/>
+      <task-card/>
       <task-card/>
     </div>
   </div>
@@ -25,9 +40,10 @@
 import {Component, Prop, Vue} from "nuxt-property-decorator";
 import TaskCard from "~/components/guild-detail/TaskCard.vue";
 import {faCog} from "@fortawesome/free-solid-svg-icons";
+import TooltipButton from "~/components/general/TooltipButton.vue";
 
 @Component({
-  components: {TaskCard}
+  components: {TooltipButton, TaskCard}
 })
 export default class Index extends Vue {
   @Prop({type: String, default: 'サーバー名'})
@@ -48,6 +64,12 @@ export default class Index extends Vue {
 
   .server-control-container {
     margin-left: 0.25em;
+  }
+}
+
+.task-list-container {
+  & > div {
+    margin-bottom: 1em;
   }
 }
 </style>
