@@ -72,9 +72,9 @@ export default class Settings extends Vue {
   color: #E3E5E9;
 
   .role-setting-closer-container {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 1.25rem;
 
     display: flex;
     align-items: center;
@@ -93,7 +93,7 @@ export default class Settings extends Vue {
 
   .role-setting-closer-container:link, .role-setting-closer-container:visited {
     color: #4F5760;
-    transition: background-color 200ms, transform 200ms ease-in-out;
+    transition: background-color 200ms, transform 100ms ease-in-out;
   }
 
   .role-setting-closer-container:hover {
