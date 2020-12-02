@@ -80,10 +80,6 @@ export default class Settings extends Vue {
     align-items: center;
     justify-content: center;
   }
-
-  .role-setting-closer-icon svg {
-    vertical-align: middle;
-  }
 }
 
 .light {
