@@ -6,9 +6,12 @@ export default {
         NODE_ENV
     },
     buildModules: ['@nuxt/typescript-build', '@nuxtjs/dotenv'],
-    css:[
-      '@/assets/styles/main.scss'
+    css: [
+        '@/assets/styles/main.scss'
     ],
+    pageTransition: {
+        name: 'yoyacord'
+    },
     modules: [
         'nuxt-fontawesome',
         '@nuxtjs/axios'

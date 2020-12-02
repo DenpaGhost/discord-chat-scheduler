@@ -1,56 +1,56 @@
 <template>
-  <div>
-    <div class="server-name-container">
-      <div>
-        <h3 class="text-high">{{ serverName }}</h3>
+    <div class="server-tasks">
+      <div class="server-name-container">
+        <div>
+          <h3 class="text-high">{{ serverName }} {{ serverId }}</h3>
+        </div>
+        <div class="server-control-container">
+          <tooltip-button :right="true">
+            <template v-slot:label>
+              <nuxt-link :to="`/servers/${serverId}/settings`"
+                         class="button-link">
+                <fa :icon="icon.cog"/>
+              </nuxt-link>
+            </template>
+            <template v-slot:tooltip>
+              管理ロール設定
+            </template>
+          </tooltip-button>
+        </div>
       </div>
-      <div class="server-control-container">
-        <tooltip-button :right="true">
-          <template v-slot:label>
-            <nuxt-link :to="`/servers/${serverId}/settings`"
-                       class="button-link">
-              <fa :icon="icon.cog"/>
-            </nuxt-link>
-          </template>
-          <template v-slot:tooltip>
-            管理ロール設定
-          </template>
-        </tooltip-button>
+
+      <div class="task-add">
+        <div>
+          <h3>
+            予約中のメッセージ
+          </h3>
+        </div>
+        <div>
+          <tooltip-button right>
+            <template v-slot:label>
+              <button type="button" class="button-link" @click="editModalOpen = true">
+                <fa :icon="icon.plus"/>
+              </button>
+            </template>
+            <template v-slot:tooltip>
+              メッセージの予約を追加
+            </template>
+          </tooltip-button>
+        </div>
+      </div>
+
+      <task-edit-modal-dialog :is-open="editModalOpen" @close="editModalOpen = false"/>
+
+      <div class="task-list-container">
+        <task-card/>
+        <task-card/>
+        <task-card/>
+        <task-card/>
+        <task-card/>
+        <task-card/>
+        <task-card/>
       </div>
     </div>
-
-    <div class="task-add">
-      <div>
-        <h3>
-          予約中のメッセージ
-        </h3>
-      </div>
-      <div>
-        <tooltip-button right>
-          <template v-slot:label>
-            <button type="button" class="button-link" @click="editModalOpen = true">
-              <fa :icon="icon.plus"/>
-            </button>
-          </template>
-          <template v-slot:tooltip>
-            メッセージの予約を追加
-          </template>
-        </tooltip-button>
-      </div>
-    </div>
-
-    <task-edit-modal-dialog :is-open="editModalOpen" @close="editModalOpen = false"/>
-
-    <div class="task-list-container">
-      <task-card/>
-      <task-card/>
-      <task-card/>
-      <task-card/>
-      <task-card/>
-      <task-card/>
-      <task-card/>
-    </div>
-  </div>
 </template>
 
 <script lang="ts">

@@ -1,0 +1,92 @@
+.yoyacord-enter-active {
+  transition-duration: 200ms;
+
+  &.server-tasks {
+    transition: opacity 200ms !important;
+    position: absolute;
+    padding: inherit;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &.role-settings {
+    transition: transform 200ms ease-in-out, opacity 200ms !important;
+    position: absolute;
+    padding: inherit;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+.yoyacord-enter {
+  &.server-tasks {
+    opacity: 0;
+  }
+
+  &.role-settings {
+    opacity: 0;
+    transform: translateX(1em);
+  }
+}
+
+.yoyacord-enter-to {
+  &.server-tasks {
+    opacity: 1;
+  }
+
+  &.role-settings {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+.yoyacord-leave-active {
+  transition-duration: 200ms;
+
+  &.server-tasks {
+    transition: opacity 200ms !important;
+    position: absolute;
+    padding: inherit;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &.role-settings {
+    transition: transform 200ms ease-in-out, opacity 200ms !important;
+    position: absolute;
+    padding: inherit;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+.yoyacord-leave {
+  &.server-tasks {
+    opacity: 1;
+  }
+
+  &.role-settings {
+    opacity: 1;
+    transform: translateX(0em);
+  }
+}
+
+.yoyacord-leave-to {
+  &.server-tasks {
+    opacity: 0;
+  }
+
+  &.role-settings {
+    opacity: 0;
+    transform: translateX(1em);
+  }
+}

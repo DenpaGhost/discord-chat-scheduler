@@ -1,5 +1,5 @@
 <template>
-  <div class="role-setting-container">
+  <div class="role-setting-container role-settings">
     <div class="role-setting-closer">
       <nuxt-link class="role-setting-closer-container"
                  replace
@@ -71,6 +71,8 @@ export default class Settings extends Vue {
   text-align: center;
   color: #E3E5E9;
 
+  animation: closer-show 200ms 200ms backwards;
+
   .role-setting-closer-container {
     width: 2.5rem;
     height: 2.5rem;
@@ -79,6 +81,16 @@ export default class Settings extends Vue {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+
+@keyframes closer-show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 
