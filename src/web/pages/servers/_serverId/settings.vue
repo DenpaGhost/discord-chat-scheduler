@@ -17,6 +17,8 @@
       </h3>
     </div>
 
+    <dropdown-list/>
+
     <switch-control v-model="roleSettings.value">
       スイッチコントロール
     </switch-control>
@@ -27,9 +29,10 @@
 import {Component, Vue} from "nuxt-property-decorator";
 import SwitchControl from "~/components/general/SwitchControl.vue";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
+import DropdownList from "~/components/general/DropdownList.vue";
 
 @Component({
-  components: {SwitchControl}
+  components: {DropdownList, SwitchControl}
 })
 export default class Settings extends Vue {
   roleSettings = {
