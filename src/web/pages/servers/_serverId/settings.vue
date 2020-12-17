@@ -19,9 +19,11 @@
 
     <dropdown-list/>
 
-    <switch-control v-model="roleSettings.value">
+    <switch-control v-model="roleSettings.value" class="mb-3">
       スイッチコントロール
     </switch-control>
+
+    <mentionable-text-input/>
   </div>
 </template>
 
@@ -30,9 +32,10 @@ import {Component, Vue} from "nuxt-property-decorator";
 import SwitchControl from "~/components/general/SwitchControl.vue";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import DropdownList from "~/components/general/DropdownList.vue";
+import MentionableTextInput from "~/components/message/MentionableTextInput.vue";
 
 @Component({
-  components: {DropdownList, SwitchControl}
+  components: {MentionableTextInput, DropdownList, SwitchControl}
 })
 export default class Settings extends Vue {
   roleSettings = {

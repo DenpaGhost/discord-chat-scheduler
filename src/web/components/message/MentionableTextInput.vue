@@ -1,7 +1,10 @@
 <template>
   <div class="mti-container">
     <div class="mt-input" contenteditable="true">
-      aaaaa
+      aaaa
+    </div>
+    <div class="mti-placeholder">
+      {{ placeholder }}
     </div>
   </div>
 </template>
@@ -35,17 +38,49 @@ export default class MentionableTextInput extends Vue {
 
 <style lang="scss">
 .mti-container {
-  padding: 0.25em;
+  position: relative;
+
 }
 
 .mt-input {
   min-height: 1em;
+  outline: none;
+  pointer-events: auto;
+  padding: 0.5em;
+
+  &:focus {
+    border: none;
+  }
+
+  z-index: 2;
+}
+
+.mti-placeholder {
+  pointer-events: none;
+  padding: 0.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 1em;
+  z-index: 1;
+
+  border: 2px rgba(0, 0, 0, 0) solid;
 }
 
 .light {
-  .mti-container {
-    border-radius: 0.25em;
+  .mt-input {
+    border-radius: 0.5em;
     border: 2px solid #E3E5E9;
+    background-color: #ffffff;
+  }
+
+  .mt-input:focus {
+    border-color: blue;
+  }
+
+  .mti-placeholder {
+    color: #eee;
   }
 }
 </style>
