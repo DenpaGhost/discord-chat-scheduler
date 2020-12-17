@@ -1,7 +1,7 @@
 <template>
   <div class="mti-container">
-    <div class="mt-input" contenteditable="true">
-      aaaa
+    <div class="mt-input" contenteditable="true" ref="input">
+      aaaa<span contenteditable="false" data-tag="aaaa">aaaa</span>
     </div>
     <div class="mti-placeholder">
       {{ placeholder }}
@@ -33,6 +33,14 @@ export default class MentionableTextInput extends Vue {
     {name: 'テキストチャンネル'},
     {name: 'information'}
   ];
+
+  mounted() {
+    console.log(this.innerText);
+  }
+
+  get innerText() {
+    return (this.$refs['input'] as Element).innerHTML;
+  }
 }
 </script>
 
