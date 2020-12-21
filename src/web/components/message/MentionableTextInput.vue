@@ -6,6 +6,13 @@
          v-html="initial"
          @input="onUpdate"/>
     <div v-if="showPlaceholder" class="mti-placeholder">{{ placeholder }}</div>
+
+    <div class="mti-mention-completer">
+      <div v-for="it of mentionableMembers"
+           class="mti-mention-completer-item">
+        @ {{ it.name }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,6 +26,7 @@ export default class MentionableTextInput extends Vue {
 
   initial: string = '';
   input: string = 'aaaa<span contenteditable="false" data-tag="aaaa">aaaa</span>';
+  lastCursorPosition: number = 0;
 
   mentionableMembers: Array<{ name: string; }> = [
     {name: 'Denpa_Ghost'},
@@ -46,6 +54,9 @@ export default class MentionableTextInput extends Vue {
     if (e && e.target instanceof Element) {
       this.input = e.target.innerHTML;
     }
+
+    console.log(this.textarea().childNodes);
+    console.log(window.getSelection()?.getRangeAt(0));
   }
 
   initialize() {
@@ -99,6 +110,17 @@ export default class MentionableTextInput extends Vue {
   border: 2px rgba(0, 0, 0, 0) solid;
 }
 
+.mti-mention-completer {
+  position: absolute;
+  margin-top: 0.25em;
+  left: 0;
+  right: 0;
+
+  .mti-mention-completer-item {
+    padding: 0.5em;
+  }
+}
+
 .light {
   .mt-input {
     border-radius: 0.5em;
@@ -112,6 +134,13 @@ export default class MentionableTextInput extends Vue {
 
   .mti-placeholder {
     color: #eee;
+  }
+
+  .mti-mention-completer {
+    border-radius: 0.5em;
+    border: 2px solid #E3E5E9;
+    background-color: #ffffff;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   }
 }
 </style>
