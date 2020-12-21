@@ -14,7 +14,7 @@ import {Component, Prop, Vue} from "nuxt-property-decorator";
 
 @Component
 export default class MentionableTextInput extends Vue {
-  @Prop({type: String, default: 'hello world!'})
+  @Prop({type: String, default: ''})
   placeholder!: string;
 
   initial: string = '';
@@ -42,22 +42,27 @@ export default class MentionableTextInput extends Vue {
   }
 
   onUpdate(e: InputEvent) {
+    // editable content divに入力された内容を変数へバインド
     if (e && e.target instanceof Element) {
-      console.log(e.target.innerHTML);
       this.input = e.target.innerHTML;
     }
   }
 
   initialize() {
+    // 初期値をセット
     this.initial = this.input;
   }
 
-  get textarea() {
+  textarea() {
     return this.$refs['input'] as Element;
   }
 
   get showPlaceholder() {
     return this.input.length <= 0;
+  }
+
+  hasFocus() {
+    return document.activeElement == this.textarea();
   }
 }
 </script>
