@@ -1,11 +1,11 @@
 <template>
   <div class="mti-container">
-    <div class="mt-input" contenteditable="true" ref="input">
-      aaaa<span contenteditable="false" data-tag="aaaa">aaaa</span>
-    </div>
-    <div class="mti-placeholder">
-      {{ placeholder }}
-    </div>
+    <div class="mt-input"
+         contenteditable="true"
+         ref="input"
+         v-html="initial"
+         @input="onUpdate"/>
+    <div v-if="showPlaceholder" class="mti-placeholder">{{ placeholder }}</div>
   </div>
 </template>
 
@@ -16,6 +16,9 @@ import {Component, Prop, Vue} from "nuxt-property-decorator";
 export default class MentionableTextInput extends Vue {
   @Prop({type: String, default: 'hello world!'})
   placeholder!: string;
+
+  initial: string = '';
+  input: string = 'aaaa<span contenteditable="false" data-tag="aaaa">aaaa</span>';
 
   mentionableMembers: Array<{ name: string; }> = [
     {name: 'Denpa_Ghost'},
@@ -35,11 +38,26 @@ export default class MentionableTextInput extends Vue {
   ];
 
   mounted() {
-    console.log(this.innerText);
+    this.initialize();
   }
 
-  get innerText() {
-    return (this.$refs['input'] as Element).innerHTML;
+  onUpdate(e: InputEvent) {
+    if (e && e.target instanceof Element) {
+      console.log(e.target.innerHTML);
+      this.input = e.target.innerHTML;
+    }
+  }
+
+  initialize() {
+    this.initial = this.input;
+  }
+
+  get textarea() {
+    return this.$refs['input'] as Element;
+  }
+
+  get showPlaceholder() {
+    return this.input.length <= 0;
   }
 }
 </script>
