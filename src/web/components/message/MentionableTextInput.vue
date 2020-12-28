@@ -55,8 +55,10 @@ export default class MentionableTextInput extends Vue {
       this.input = e.target.innerHTML;
     }
 
-    console.log(this.textarea().childNodes);
-    console.log(window.getSelection()?.getRangeAt(0));
+    const selection = document.getSelection()?.getRangeAt(0);
+    for (let i = 0; i < this.textarea().childNodes.length; i++) {
+      console.log(`[${i}]: ${this.textarea().childNodes[i] == selection?.startContainer}`);
+    }
   }
 
   initialize() {
