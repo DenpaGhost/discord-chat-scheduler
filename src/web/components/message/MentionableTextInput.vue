@@ -75,7 +75,17 @@ export default class MentionableTextInput extends Vue {
 
     this.lastRange = document.getSelection()?.getRangeAt(0);
 
-    console.log(this.lastRange);
+    if (!(this.lastRange?.startContainer &&
+        this.lastRange?.startOffset &&
+        this.lastRange.startContainer.nodeValue))
+      return;
+
+    const beforeAt = this.lastRange.startContainer.nodeValue.substr(
+        this.lastRange.startOffset - 2, 1);
+
+    if (e.data == '@' && (beforeAt == ' ' || this.lastRange.startOffset == 1)) {
+      console.log('ヒントを表示');
+    }
   }
 
   onMentionerClick(valueHTML: string) {
@@ -85,6 +95,8 @@ export default class MentionableTextInput extends Vue {
 
     let currentNodeNum = 0;
     const childNodes = this.childNodes();
+
+    console.log(childNodes);
 
     // キャレットの当たっていたノードを特定
     for (let i = 0; i < childNodes.length; i++) {
