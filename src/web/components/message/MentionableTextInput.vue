@@ -4,11 +4,18 @@
          contenteditable="true"
          ref="input"
          v-html="initial"
-         @input="onUpdate"/>
+         @input="onUpdate"
+         @keydown.meta.90.prevent
+         @keydown.ctrl.90.prevent
+         @keydown.meta.shift.90.prevent
+         @keydown.ctrl.shift.90.prevent
+         @keydown.ctrl.89.prevent
+         @keydown.meta.89.prevent/>
     <div v-if="showPlaceholder" class="mti-placeholder">{{ placeholder }}</div>
 
     <div class="mti-mention-completer">
       <div v-for="it of mentionableMembers"
+           @click="onMentionerClick(it.html)"
            class="mti-mention-completer-item">
         @ {{ it.name }}
       </div>
@@ -25,13 +32,24 @@ export default class MentionableTextInput extends Vue {
   placeholder!: string;
 
   initial: string = '';
-  input: string = 'aaaa<span contenteditable="false" data-tag="aaaa">aaaa</span>';
-  lastCursorPosition: number = 0;
+  input: string = '';
+  lastRange?: Range
 
-  mentionableMembers: Array<{ name: string; }> = [
-    {name: 'Denpa_Ghost'},
-    {name: 'mi2_ku39'},
-    {name: 'rni2_moka'}
+  kapsel_nodeId: number = 1;
+
+  mentionableMembers: Array<{ name: string; html: string; }> = [
+    {
+      name: 'Denpa_Ghost',
+      html: "<span contenteditable=\"false\" style=\"color: blue\">@Denpa_Ghost</span>"
+    },
+    {
+      name: 'mi2_ku39',
+      html: "<span contenteditable=\"false\">@Denpa_Ghost</span>"
+    },
+    {
+      name: 'rni2_moka',
+      html: "<span contenteditable=\"false\">@Denpa_Ghost</span>"
+    }
   ];
 
   mentionableRoles: Array<{ name: string; }> = [
@@ -55,10 +73,68 @@ export default class MentionableTextInput extends Vue {
       this.input = e.target.innerHTML;
     }
 
-    const selection = document.getSelection()?.getRangeAt(0);
-    for (let i = 0; i < this.textarea().childNodes.length; i++) {
-      console.log(`[${i}]: ${this.textarea().childNodes[i] == selection?.startContainer}`);
+    this.lastRange = document.getSelection()?.getRangeAt(0);
+
+    console.log(this.lastRange);
+  }
+
+  onMentionerClick(valueHTML: string) {
+    // キャレットが当たっていたかバリデーション
+    if (!this.lastRange?.startContainer || !this.lastRange?.startContainer.nodeValue)
+      return;
+
+    let currentNodeNum = 0;
+    const childNodes = this.childNodes();
+
+    // キャレットの当たっていたノードを特定
+    for (let i = 0; i < childNodes.length; i++) {
+      const childNode = childNodes[i] as Node;
+      const selectionNode = this.lastRange.startContainer.parentNode as Node;
+
+      if (childNode == selectionNode) {
+        currentNodeNum = i;
+        break;
+      }
     }
+
+    // 要素の挿入
+    const before = this.lastRange.startContainer.nodeValue.substr(
+        0,
+        this.lastRange.startOffset - 1
+    );
+    const beforeHTML = before.length > 0 ? `<span>${before}</span>` : '';
+
+    const after = this.lastRange.startContainer.nodeValue.substr(
+        this.lastRange.startOffset,
+        this.lastRange.startContainer.nodeValue.length
+    );
+
+    this.textarea().removeChild(childNodes[currentNodeNum]);
+    if (currentNodeNum != 0) {
+      (childNodes[currentNodeNum - 1] as Element).insertAdjacentHTML(
+          'afterend',
+          `${beforeHTML}${valueHTML}<span>&nbsp;${after}</span>`
+      );
+    } else {
+      this.textarea().insertAdjacentHTML(
+          'afterbegin',
+          `${beforeHTML}${valueHTML}<span>&nbsp;${after}</span>`
+      );
+    }
+
+    // キャレットの復元
+    const appendedNodeNum = before.length > 0 ? 2 : 1;
+    const selectingNode = this.textarea().childNodes[currentNodeNum + appendedNodeNum].firstChild;
+    if (selectingNode == null) return;
+
+    this.textarea().focus();
+    const range = document.createRange();
+    range.setStart(
+        selectingNode,
+        1);
+    range.collapse(true);
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(range);
   }
 
   initialize() {
@@ -67,15 +143,15 @@ export default class MentionableTextInput extends Vue {
   }
 
   textarea() {
-    return this.$refs['input'] as Element;
+    return this.$refs['input'] as HTMLElement;
+  }
+
+  childNodes() {
+    return this.textarea().childNodes;
   }
 
   get showPlaceholder() {
     return this.input.length <= 0;
-  }
-
-  hasFocus() {
-    return document.activeElement == this.textarea();
   }
 }
 </script>
