@@ -75,6 +75,9 @@ export default class MentionableTextInput extends Vue {
 
     this.lastRange = document.getSelection()?.getRangeAt(0);
 
+    console.log(this.lastRange?.startContainer.parentNode);
+    console.log(this.textarea().childNodes);
+
     if (!(this.lastRange?.startContainer &&
         this.lastRange?.startOffset &&
         this.lastRange.startContainer.nodeValue))
@@ -93,7 +96,7 @@ export default class MentionableTextInput extends Vue {
     if (!this.lastRange?.startContainer || !this.lastRange?.startContainer.nodeValue)
       return;
 
-    let currentNodeNum = 0;
+    let currentNodeNum: number = 0;
     const childNodes = this.childNodes();
 
     console.log(childNodes);
@@ -123,11 +126,24 @@ export default class MentionableTextInput extends Vue {
 
     this.textarea().removeChild(childNodes[currentNodeNum]);
     if (currentNodeNum != 0) {
-      (childNodes[currentNodeNum - 1] as Element).insertAdjacentHTML(
+      console.log('先頭じゃない');
+      let beforeNode = childNodes[currentNodeNum - 1];
+
+      if (!(beforeNode instanceof Element)) {
+        const div = document.createElement('div') as HTMLDivElement;
+        const span = document.createElement('span') as HTMLSpanElement;
+        span.innerText = beforeNode.nodeValue ?? '';
+        div.appendChild(span);
+        beforeNode.replaceWith(div);
+        beforeNode = div;
+      }
+
+      (beforeNode as Element).insertAdjacentHTML(
           'afterend',
           `${beforeHTML}${valueHTML}<span>&nbsp;${after}</span>`
       );
     } else {
+      console.log('先頭');
       this.textarea().insertAdjacentHTML(
           'afterbegin',
           `${beforeHTML}${valueHTML}<span>&nbsp;${after}</span>`
