@@ -35,6 +35,8 @@ export default class MentionableTextInput_v2 extends Vue {
   input: string = '';
   lastRange?: Range
 
+  isInserting: boolean = false;
+
   mentionableMembers: Array<{ name: string; html: string; }> = [
     {
       name: 'Denpa_Ghost',
@@ -66,15 +68,15 @@ export default class MentionableTextInput_v2 extends Vue {
   }
 
   onUpdate(e: InputEvent) {
+    // メンションタグ挿入中ならば処理を行わない
+    if (this.isInserting) return;
+
     // editable content divに入力された内容を変数へバインド
     if (e && e.target instanceof Element) {
       this.input = e.target.innerHTML;
     }
 
     this.lastRange = document.getSelection()?.getRangeAt(0);
-
-    console.log(this.lastRange?.startContainer.parentNode);
-    console.log(this.textarea().childNodes);
 
     if (!(this.lastRange?.startContainer &&
         this.lastRange?.startOffset &&
@@ -91,8 +93,10 @@ export default class MentionableTextInput_v2 extends Vue {
 
   onMentionerClick(valueHTML: string) {
     // キャレットが当たっていたかバリデーション
-    if (!this.lastRange?.startContainer || !this.lastRange?.startContainer.nodeValue)
+    if (!this.lastRange?.startContainer || !this.lastRange.startContainer.nodeValue)
       return;
+
+    this.isInserting = true;
 
     // 挿入するオブジェクトの生成
     const before =
@@ -121,11 +125,15 @@ export default class MentionableTextInput_v2 extends Vue {
     const currentElement = ((): Element => {
       if (currentNode instanceof Element) {
         return currentNode;
-      } else {
+      } else if (this.lastRange != undefined) {
+        //DOMでnodeを囲う
         const elem = document.createElement('span') as HTMLSpanElement;
-        elem.innerText = this.lastRange.startContainer.nodeValue;
-        this.lastRange.insertNode(elem); // ここでキャレット位置に挿入してnodeがまとまらなくなっている
+        this.lastRange.setStart(this.lastRange.startContainer, 0);
+        this.lastRange.setEnd(this.lastRange.startContainer, this.lastRange.startContainer.nodeValue.length);
+        this.lastRange.surroundContents(elem);
         return elem;
+      } else {
+        throw new Error('キャレット関係エラー');
       }
     })();
 
@@ -136,23 +144,30 @@ export default class MentionableTextInput_v2 extends Vue {
 
     currentElement.insertAdjacentHTML(
         'beforebegin',
-        `<span>${valueHTML}</span>`);
+        `${valueHTML}`);
 
     currentElement.insertAdjacentElement('beforebegin', afterDOM);
 
+    console.log(`${beforeDOM?.outerHTML} ${valueHTML} ${afterDOM.outerHTML}`);
+
     // 置き換え対象の削除
-    // this.lastRange.startContainer.parentNode?.removeChild(this.lastRange.startContainer);
-    // currentElement.remove();
+    currentElement.remove();
 
     // キャレットの復元
     this.textarea().focus();
     const range = document.createRange();
-    range.setStart(
-        afterDOM,
-        1);
+    if (afterDOM.firstChild) {
+      range.setStart(
+          afterDOM.firstChild,
+          1);
+    } else {
+      range.setStart(afterDOM, 0);
+    }
     range.collapse(true);
     window.getSelection()?.removeAllRanges();
     window.getSelection()?.addRange(range);
+
+    this.isInserting = false;
   }
 
   initialize() {
