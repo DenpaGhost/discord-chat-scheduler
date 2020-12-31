@@ -35,7 +35,7 @@ export default class MentionableTextInput extends Vue {
   input: string = '';
   lastRange?: Range
 
-  kapsel_nodeId: number = 1;
+  isInserting: boolean = false;
 
   mentionableMembers: Array<{ name: string; html: string; }> = [
     {
@@ -68,15 +68,15 @@ export default class MentionableTextInput extends Vue {
   }
 
   onUpdate(e: InputEvent) {
+    // メンションタグ挿入中ならば処理を行わない
+    if (this.isInserting) return;
+
     // editable content divに入力された内容を変数へバインド
     if (e && e.target instanceof Element) {
       this.input = e.target.innerHTML;
     }
 
     this.lastRange = document.getSelection()?.getRangeAt(0);
-
-    console.log(this.lastRange?.startContainer.parentNode);
-    console.log(this.textarea().childNodes);
 
     if (!(this.lastRange?.startContainer &&
         this.lastRange?.startOffset &&
@@ -93,76 +93,81 @@ export default class MentionableTextInput extends Vue {
 
   onMentionerClick(valueHTML: string) {
     // キャレットが当たっていたかバリデーション
-    if (!this.lastRange?.startContainer || !this.lastRange?.startContainer.nodeValue)
+    if (!this.lastRange?.startContainer || !this.lastRange.startContainer.nodeValue)
       return;
 
-    let currentNodeNum: number = 0;
-    const childNodes = this.childNodes();
+    this.isInserting = true;
 
-    console.log(childNodes);
+    // 挿入するオブジェクトの生成
+    const before =
+        this.lastRange.startContainer.nodeValue.substr(
+            0,
+            this.lastRange.startOffset - 1);
 
-    // キャレットの当たっていたノードを特定
-    for (let i = 0; i < childNodes.length; i++) {
-      const childNode = childNodes[i] as Node;
-      const selectionNode = this.lastRange.startContainer.parentNode as Node;
-
-      if (childNode == selectionNode) {
-        currentNodeNum = i;
-        break;
+    const beforeDOM = ((): HTMLSpanElement | undefined => {
+      if (before.length > 0) {
+        const elem = document.createElement('span') as HTMLSpanElement;
+        elem.innerText = before;
+        return elem;
+      } else {
+        return undefined;
       }
-    }
+    })();
 
-    // 要素の挿入
-    const before = this.lastRange.startContainer.nodeValue.substr(
-        0,
-        this.lastRange.startOffset - 1
-    );
-    const beforeHTML = before.length > 0 ? `<span>${before}</span>` : '';
-
-    const after = this.lastRange.startContainer.nodeValue.substr(
+    const afterDOM = document.createElement('span') as HTMLSpanElement;
+    afterDOM.innerHTML = '&nbsp;' + this.lastRange.startContainer.nodeValue.substr(
         this.lastRange.startOffset,
         this.lastRange.startContainer.nodeValue.length
     );
 
-    this.textarea().removeChild(childNodes[currentNodeNum]);
-    if (currentNodeNum != 0) {
-      console.log('先頭じゃない');
-      let beforeNode = childNodes[currentNodeNum - 1];
-
-      if (!(beforeNode instanceof Element)) {
-        const div = document.createElement('div') as HTMLDivElement;
-        const span = document.createElement('span') as HTMLSpanElement;
-        span.innerText = beforeNode.nodeValue ?? '';
-        div.appendChild(span);
-        beforeNode.replaceWith(div);
-        beforeNode = div;
+    // 置き換え基準のオブジェクト化
+    const currentNode: Node = this.lastRange.startContainer;
+    const currentElement = ((): Element => {
+      if (currentNode instanceof Element) {
+        return currentNode;
+      } else if (this.lastRange != undefined) {
+        //DOMでnodeを囲う
+        const elem = document.createElement('span') as HTMLSpanElement;
+        this.lastRange.setStart(this.lastRange.startContainer, 0);
+        this.lastRange.setEnd(this.lastRange.startContainer, this.lastRange.startContainer.nodeValue.length);
+        this.lastRange.surroundContents(elem);
+        return elem;
+      } else {
+        throw new Error('キャレット関係エラー');
       }
+    })();
 
-      (beforeNode as Element).insertAdjacentHTML(
-          'afterend',
-          `${beforeHTML}${valueHTML}<span>&nbsp;${after}</span>`
-      );
-    } else {
-      console.log('先頭');
-      this.textarea().insertAdjacentHTML(
-          'afterbegin',
-          `${beforeHTML}${valueHTML}<span>&nbsp;${after}</span>`
-      );
+    // タグ挿入
+    if (beforeDOM != undefined) {
+      currentElement.insertAdjacentElement('beforebegin', beforeDOM);
     }
 
-    // キャレットの復元
-    const appendedNodeNum = before.length > 0 ? 2 : 1;
-    const selectingNode = this.textarea().childNodes[currentNodeNum + appendedNodeNum].firstChild;
-    if (selectingNode == null) return;
+    currentElement.insertAdjacentHTML(
+        'beforebegin',
+        `${valueHTML}`);
 
+    currentElement.insertAdjacentElement('beforebegin', afterDOM);
+
+    console.log(`${beforeDOM?.outerHTML} ${valueHTML} ${afterDOM.outerHTML}`);
+
+    // 置き換え対象の削除
+    currentElement.remove();
+
+    // キャレットの復元
     this.textarea().focus();
     const range = document.createRange();
-    range.setStart(
-        selectingNode,
-        1);
+    if (afterDOM.firstChild) {
+      range.setStart(
+          afterDOM.firstChild,
+          1);
+    } else {
+      range.setStart(afterDOM, 0);
+    }
     range.collapse(true);
     window.getSelection()?.removeAllRanges();
     window.getSelection()?.addRange(range);
+
+    this.isInserting = false;
   }
 
   initialize() {

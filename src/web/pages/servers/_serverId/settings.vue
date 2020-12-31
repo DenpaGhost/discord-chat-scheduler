@@ -23,9 +23,7 @@
       スイッチコントロール
     </switch-control>
 
-    <!--    <mentionable-text-input/>-->
-
-    <mentionable-text-input_v2/>
+    <mentionable-text-input/>
   </div>
 </template>
 
@@ -35,10 +33,9 @@ import SwitchControl from "~/components/general/SwitchControl.vue";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import DropdownList from "~/components/general/DropdownList.vue";
 import MentionableTextInput from "~/components/message/MentionableTextInput.vue";
-import MentionableTextInput_v2 from "~/components/message/MentionableTextInput_v2.vue";
 
 @Component({
-  components: {MentionableTextInput_v2, MentionableTextInput, DropdownList, SwitchControl}
+  components: {MentionableTextInput, DropdownList, SwitchControl}
 })
 export default class Settings extends Vue {
   roleSettings = {
